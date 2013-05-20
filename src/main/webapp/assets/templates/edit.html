@@ -1,0 +1,41 @@
+<form class="form-horizontal">
+    <fieldset>
+        <legend>Edit Album</legend>
+
+        <div class="control-group">
+            <label class="control-label" for="name">Album Name:</label>
+
+            <div class="controls">
+                <input id="name" type="text" ng-model="album.name"/>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label" for="artist">Artist:</label>
+
+            <div class="controls">
+                <input id="artist" type="text" ng-model="album.artist"/>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label" for="releaseYear">Year:</label>
+
+            <div class="controls">
+                <input id="releaseYear" type="text" ng-model="album.releaseYear"/>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label" for="genre">Genre:</label>
+
+            <div class="controls">
+                <input id="genre" type="text" ng-model="album.genre"/>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <button type="submit" class="btn" ng-click="save()">Save</button>
+        </div>
+    </fieldset>
+</form>
