@@ -26,25 +26,25 @@ public class AlbumController {
 
     @ResponseBody
     @RequestMapping(method = RequestMethod.PUT)
-    public Long add(@RequestBody @Valid Album album) {
+    public String add(@RequestBody @Valid Album album) {
         return repository.save(album).getId();
     }
 
     @ResponseBody
     @RequestMapping(method = RequestMethod.POST)
-    public Long update(@RequestBody @Valid Album album) {
+    public String update(@RequestBody @Valid Album album) {
         return repository.save(album).getId();
     }
 
     @ResponseBody
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public Album getById(@PathVariable Long id) {
+    public Album getById(@PathVariable String id) {
         return repository.findOne(id);
     }
 
     @ResponseBody
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-    public void deleteById(@PathVariable Long id) {
+    public void deleteById(@PathVariable String id) {
         repository.delete(id);
     }
 }

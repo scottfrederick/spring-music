@@ -1,4 +1,4 @@
-package org.cloudfoundry.samples.music.config;
+package org.cloudfoundry.samples.music.config.data;
 
 import org.apache.commons.dbcp.BasicDataSource;
 import org.cloudfoundry.runtime.env.CloudEnvironment;

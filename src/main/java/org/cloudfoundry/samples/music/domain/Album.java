@@ -1,15 +1,18 @@
 package org.cloudfoundry.samples.music.domain;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
-import javax.persistence.Id;
 
 @Entity
+@Document
 public class Album {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
-    private long id;
+    private String id;
 
     private String name;
     private String artist;
@@ -26,11 +29,11 @@ public class Album {
         this.genre = genre;
     }
 
-    public long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
