@@ -1,9 +1,9 @@
 package org.cloudfoundry.samples.music.config.data;
 
 import org.cloudfoundry.runtime.env.CloudEnvironment;
-import org.cloudfoundry.runtime.env.MysqlServiceInfo;
-import org.cloudfoundry.runtime.service.relational.MysqlServiceCreator;
-import org.hibernate.dialect.MySQL5Dialect;
+import org.cloudfoundry.runtime.env.PostgresqlServiceInfo;
+import org.cloudfoundry.runtime.service.relational.PostgresqlServiceCreator;
+import org.hibernate.dialect.PostgreSQL82Dialect;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -17,20 +17,21 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Configuration
-@Profile("mysql")
+@Profile("postgres")
 @EnableJpaRepositories("org.cloudfoundry.samples.music.repositories.jpa")
-public class MySqlDataSourceConfig extends RdbmsDataSourceConfig {
+public class PostgresDataSourceConfig extends RdbmsDataSourceConfig {
 
     @Bean
     public DataSource dataSource() {
         CloudEnvironment cloudEnvironment = new CloudEnvironment();
 
         if (cloudEnvironment.isCloudFoundry()) {
-            MysqlServiceInfo serviceInfo = new MysqlServiceInfo(getCloudServiceInfo("mysql"));
-            MysqlServiceCreator serviceCreator = new MysqlServiceCreator();
+            PostgresqlServiceInfo serviceInfo = new PostgresqlServiceInfo(getCloudServiceInfo("mysql"));
+            PostgresqlServiceCreator serviceCreator = new PostgresqlServiceCreator();
             return serviceCreator.createService(serviceInfo);
         } else {
-            return createBasicDataSource("jdbc:mysql://localhost/music", "com.mysql.jdbc.Driver", "", "");
+            return createBasicDataSource("jdbc:postgresql://localhost/music", "org.postgresql.Driver",
+                    "postgres", "postgres");
         }
     }
 
@@ -38,7 +39,7 @@ public class MySqlDataSourceConfig extends RdbmsDataSourceConfig {
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource) {
         Map<String, String> properties = new HashMap<String, String>();
         properties.put(org.hibernate.cfg.Environment.HBM2DDL_AUTO, "create");
-        properties.put(org.hibernate.cfg.Environment.DIALECT, MySQL5Dialect.class.getName());
+        properties.put(org.hibernate.cfg.Environment.DIALECT, PostgreSQL82Dialect.class.getName());
         properties.put(org.hibernate.cfg.Environment.SHOW_SQL, "true");
 
         return createEntityManagerFactoryBean(dataSource, properties);

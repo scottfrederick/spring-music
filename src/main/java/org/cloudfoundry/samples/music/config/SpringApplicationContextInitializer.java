@@ -55,7 +55,7 @@ public class SpringApplicationContextInitializer implements ApplicationContextIn
         List<String> foundServices = new ArrayList<String>();
 
         for (Map<String, Object> service : cloudEnvironment.getServices()) {
-            foundServices.add(service.get("label").toString());
+            foundServices.add(service.get("name").toString());
         }
 
         return foundServices.toArray(new String[foundServices.size()]);
