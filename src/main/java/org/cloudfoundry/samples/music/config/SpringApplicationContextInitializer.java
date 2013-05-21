@@ -81,8 +81,14 @@ public class SpringApplicationContextInitializer implements ApplicationContextIn
 
     private String getConfigurationErrorMessage() {
         if (isCloudFoundry())
-            return "Only one service of the following types may be bound to this application: " + Arrays.toString(serviceTypes);
+            return "Only one service of the following types may be bound to this application: " +
+                    Arrays.toString(serviceTypes) + ". " +
+                    "These services are bound to the application: " +
+                    Arrays.toString(getCloudServices());
         else
-            return "Only one active Spring profile may be set among the following: " + Arrays.toString(serviceTypes);
+            return "Only one active Spring profile may be set among the following: " +
+                    Arrays.toString(serviceTypes) + ". " +
+                    "These profiles are active: " +
+                    Arrays.toString(appEnvironment.getActiveProfiles());
     }
 }
