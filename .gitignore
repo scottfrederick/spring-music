@@ -12,6 +12,8 @@ local.properties
 
 
 target/
+
+.gradle
 build/
 
 *.log*
