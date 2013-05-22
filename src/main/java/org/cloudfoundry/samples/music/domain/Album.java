@@ -1,14 +1,11 @@
 package org.cloudfoundry.samples.music.domain;
 
-import org.springframework.data.mongodb.core.mapping.Document;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-@Document
 public class Album {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)

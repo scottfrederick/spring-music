@@ -1,4 +1,5 @@
-# Spring Music
+Spring Music
+============
 
 This is a sample application for using database services on [Cloud Foundry](http://cloudfoundry.com)
 with [Spring Framework](http://www.springframework.org).
@@ -47,8 +48,8 @@ If no bound services are found containing any of these values in the name, then 
 If more than one service containing any of these values is bound to the application, the application will throw an
 exception and fail to start.
 
-After install in the 'cf' [command-line interface for Cloud Foundry](http://docs.cloudfoundry.com/docs/using/managing-apps/cf/),
-the application can be pushed using these commands:
+After installing in the 'cf' [command-line interface for Cloud Foundry](http://docs.cloudfoundry.com/docs/using/managing-apps/cf/),
+targeting a Cloud Foundry instance, and logging in, the application can be pushed using these commands:
 
 ~~~
 $ ./gradlew assemble
@@ -67,3 +68,6 @@ $ cf create-service
 $ cf bind-service
 <choose the created database service and the spring-music application>
 ~~~
+
+To test the application with different services, you can simply stop the app, unbind a service, bind a different
+database service, and start the app.

@@ -1,4 +1,4 @@
-package org.cloudfoundry.samples.music.config;
+package org.cloudfoundry.samples.music.config.root;
 
 import org.cloudfoundry.samples.music.config.data.LocalDataSourceConfig;
 import org.cloudfoundry.samples.music.repositories.AlbumRepository;

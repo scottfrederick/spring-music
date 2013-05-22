@@ -26,7 +26,7 @@ public class PostgresDataSourceConfig extends RdbmsDataSourceConfig {
         CloudEnvironment cloudEnvironment = new CloudEnvironment();
 
         if (cloudEnvironment.isCloudFoundry()) {
-            PostgresqlServiceInfo serviceInfo = new PostgresqlServiceInfo(getCloudServiceInfo("mysql"));
+            PostgresqlServiceInfo serviceInfo = new PostgresqlServiceInfo(getCloudServiceInfo("postgres"));
             PostgresqlServiceCreator serviceCreator = new PostgresqlServiceCreator();
             return serviceCreator.createService(serviceInfo);
         } else {
