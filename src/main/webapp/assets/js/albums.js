@@ -1,5 +1,5 @@
 angular.module('albums', ['ngResource']).
-    factory('Albums',function ($resource) {
+    factory('Albums', function ($resource) {
         return $resource('albums');
     }).
     factory('Album', function ($resource) {

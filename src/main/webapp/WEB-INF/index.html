@@ -9,18 +9,43 @@
 
     <link rel="stylesheet" type="text/css" href="assets/css/bootstrap.css">
     <link rel="stylesheet" type="text/css" href="assets/css/app.css">
+    <link rel="stylesheet" type="text/css" href="assets/css/bootstrap-responsive.css">
 
     <script type="text/javascript" src="assets/js/angular.js"></script>
     <script type="text/javascript" src="assets/js/angular-resource.js"></script>
     <script type="text/javascript" src="assets/js/angular-bootstrap.js"></script>
+
+    <script type="text/javascript" src="assets/js/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="assets/js/bootstrap-dropdown.js"></script>
+
     <script type="text/javascript" src="assets/js/app.js"></script>
     <script type="text/javascript" src="assets/js/albums.js"></script>
+    <script type="text/javascript" src="assets/js/info.js"></script>
 </head>
 
 <body>
 <div class="container">
     <div class="row-fluid">
-        <div class="well">
+        <div class="navbar navbar-static-top" ng-controller="InfoController">
+            <div class="navbar-inner">
+                <a class="brand" href="#">Spring Music <i class="icon-music icon-white"></i></a>
+                <ul class="nav">
+                    <!--<li></li>-->
+                </ul>
+                <ul class="nav pull-right">
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <i class="icon-info-sign icon-white"></i>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>Profiles: {{info.profiles.join()}}</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="body">
             <ng-view></ng-view>
         </div>
     </div>
