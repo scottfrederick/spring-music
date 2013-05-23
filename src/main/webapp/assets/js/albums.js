@@ -15,7 +15,7 @@ function AlbumsController($scope, Albums, Album) {
     $scope.delete = function (album) {
         Album.delete({id: album.id},
             function () {
-                $scope.status = success("Album deleted successfully");
+                $scope.status = success("Album successfully deleted");
                 list();
             },
             function (result) {
@@ -28,10 +28,12 @@ function AlbumsController($scope, Albums, Album) {
         $scope.albumsView = "assets/templates/" + viewName + ".html";
     };
 
-    list();
-    $scope.setAlbumsView("grid");
-    $scope.sortField = "name";
-    $scope.sortDescending = false;
+    $scope.init = function() {
+        list();
+        $scope.setAlbumsView("grid");
+        $scope.sortField = "name";
+        $scope.sortDescending = false;
+    }
 }
 
 function success(message) {
