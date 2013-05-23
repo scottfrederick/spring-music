@@ -12,8 +12,6 @@ function AlbumsController($scope, Albums, Album) {
         $scope.albums = Albums.query();
     }
 
-    list();
-
     $scope.delete = function (album) {
         Album.delete({id: album.id},
             function () {
@@ -25,6 +23,13 @@ function AlbumsController($scope, Albums, Album) {
             }
         );
     };
+
+    $scope.setAlbumsView = function(viewName) {
+        $scope.albumsView = "assets/templates/" + viewName + ".html";
+    };
+
+    list();
+    $scope.setAlbumsView("grid");
 }
 
 function success(message) {

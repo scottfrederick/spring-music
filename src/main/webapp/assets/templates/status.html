@@ -1,0 +1,6 @@
+<div id="alert" ng-show="status">
+    <div ng-class="{'alert': true, 'alert-success': !status.isError, 'alert-error': status.isError}">
+        <button type="button" class="close" ng-click="status=null">&times;</button>
+        <p>{{status.message}}</p>
+    </div>
+</div>

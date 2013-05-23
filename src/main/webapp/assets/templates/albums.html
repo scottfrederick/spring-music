@@ -1,0 +1,18 @@
+<div id="albums">
+    <div class="page-header">
+        <h1>Albums</h1>
+    </div>
+
+    <div class="row-fluid">
+        <div ng-include src="'assets/templates/status.html'"></div>
+    </div>
+
+    <div class="row-fluid">
+        <a ng-click="setAlbumsView('grid')"><i class="icon-th"></i></a>
+        <a ng-click="setAlbumsView('list')"><i class="icon-th-list"></i></a>
+    </div>
+
+    <div class="row-fluid">
+        <div ng-include src="albumsView"></div>
+    </div>
+</div>

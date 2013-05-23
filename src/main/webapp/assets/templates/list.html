@@ -1,36 +1,23 @@
-<div class="page-header">
-    <h1>Albums</h1>
-</div>
-
-<div id="albums">
-    <div id="alert" ng-show="status">
-        <div ng-class="{'alert': true, 'alert-success': !status.isError, 'alert-error': status.isError}">
-            <button type="button" class="close" ng-click="status=null">&times;</button>
-            <p>{{status.message}}</p>
-        </div>
-    </div>
-
-    <table class="table table-bordered table-striped">
-        <thead>
-        <tr>
-            <th>Album Name</th>
-            <th>Artist</th>
-            <th>Year</th>
-            <th>Genre</th>
-            <th>Actions</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr ng-repeat="album in albums">
-            <td>{{album.name}}</td>
-            <td>{{album.artist}}</td>
-            <td>{{album.releaseYear}}</td>
-            <td>{{album.genre}}</td>
-            <td>
-                <!--<a href="/edit/{{album.id}}">edit</a>-->
-                <a ng-click="delete(album)"><i class="icon-remove"></i></a>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-</div>
+<table class="table table-bordered table-striped">
+    <thead>
+    <tr>
+        <th>Album Name</th>
+        <th>Artist</th>
+        <th>Year</th>
+        <th>Genre</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="album in albums">
+        <td>{{album.name}}</td>
+        <td>{{album.artist}}</td>
+        <td>{{album.releaseYear}}</td>
+        <td>{{album.genre}}</td>
+        <td>
+            <!--<a href="/edit/{{album.id}}">edit</a>-->
+            <a ng-click="delete(album)"><i class="icon-remove"></i></a>
+        </td>
+    </tr>
+    </tbody>
+</table>
