@@ -1,8 +1,6 @@
 package org.cloudfoundry.samples.music.config.data;
 
-import org.cloudfoundry.runtime.env.CloudEnvironment;
-import org.cloudfoundry.runtime.env.PostgresqlServiceInfo;
-import org.cloudfoundry.runtime.service.relational.PostgresqlServiceCreator;
+import org.cloudfoundry.samples.music.cloud.CloudInfo;
 import org.hibernate.dialect.PostgreSQL82Dialect;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,17 +21,16 @@ public class PostgresDataSourceConfig extends RdbmsDataSourceConfig {
 
     @Bean
     public DataSource dataSource() {
-        CloudEnvironment cloudEnvironment = new CloudEnvironment();
+        CloudInfo cloudInfo = new CloudInfo();
 
-        if (cloudEnvironment.isCloudFoundry()) {
-            PostgresqlServiceInfo serviceInfo = new PostgresqlServiceInfo(getCloudServiceInfo("postgres"));
-            PostgresqlServiceCreator serviceCreator = new PostgresqlServiceCreator();
-            return serviceCreator.createService(serviceInfo);
+        if (cloudInfo.isCloud()) {
+            return cloudInfo.getPostgresDataSource();
         } else {
             return createBasicDataSource("jdbc:postgresql://localhost/music", "org.postgresql.Driver",
                     "postgres", "postgres");
         }
     }
+
 
     @Bean(name = "entityManagerFactory")
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource) {

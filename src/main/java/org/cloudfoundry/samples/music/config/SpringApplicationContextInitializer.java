@@ -1,6 +1,6 @@
 package org.cloudfoundry.samples.music.config;
 
-import org.cloudfoundry.runtime.env.CloudEnvironment;
+import org.cloudfoundry.samples.music.cloud.CloudInfo;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
@@ -8,7 +8,6 @@ import org.springframework.web.context.support.AnnotationConfigWebApplicationCon
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 public class SpringApplicationContextInitializer implements ApplicationContextInitializer<AnnotationConfigWebApplicationContext> {
 
@@ -16,12 +15,12 @@ public class SpringApplicationContextInitializer implements ApplicationContextIn
 
     private static final String[] serviceTypes = {"mysql", "postgres", "mongodb", "redis"};
 
-    private CloudEnvironment cloudEnvironment;
+    private CloudInfo cloudInfo;
     private ConfigurableEnvironment appEnvironment;
 
     @Override
     public void initialize(AnnotationConfigWebApplicationContext applicationContext) {
-        cloudEnvironment = new CloudEnvironment();
+        cloudInfo = new CloudInfo();
         appEnvironment = applicationContext.getEnvironment();
 
         String persistenceProfile = IN_MEMORY_PROFILE;
@@ -48,17 +47,12 @@ public class SpringApplicationContextInitializer implements ApplicationContextIn
     }
 
     private boolean isCloudFoundry() {
-        return cloudEnvironment.isCloudFoundry();
+        return cloudInfo.isCloud();
     }
 
     private String[] getCloudServices() {
-        List<String> foundServices = new ArrayList<String>();
-
-        for (Map<String, Object> service : cloudEnvironment.getServices()) {
-            foundServices.add(service.get("name").toString());
-        }
-
-        return foundServices.toArray(new String[foundServices.size()]);
+        CloudInfo cloudInfo = new CloudInfo();
+        return cloudInfo.getServiceNames();
     }
 
     private String[] getProfileServices() {

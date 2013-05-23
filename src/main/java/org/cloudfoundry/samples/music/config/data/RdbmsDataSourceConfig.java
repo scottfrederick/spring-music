@@ -8,7 +8,7 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import javax.sql.DataSource;
 import java.util.Map;
 
-public class RdbmsDataSourceConfig extends CloudServiceConfig {
+public class RdbmsDataSourceConfig {
 
     protected BasicDataSource createBasicDataSource(String jdbcUrl, String driverClass, String userName, String password) {
         BasicDataSource dataSource = new BasicDataSource();

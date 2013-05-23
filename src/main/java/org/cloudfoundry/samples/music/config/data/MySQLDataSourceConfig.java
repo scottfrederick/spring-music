@@ -1,8 +1,6 @@
 package org.cloudfoundry.samples.music.config.data;
 
-import org.cloudfoundry.runtime.env.CloudEnvironment;
-import org.cloudfoundry.runtime.env.MysqlServiceInfo;
-import org.cloudfoundry.runtime.service.relational.MysqlServiceCreator;
+import org.cloudfoundry.samples.music.cloud.CloudInfo;
 import org.hibernate.dialect.MySQL5Dialect;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,16 +21,15 @@ public class MySqlDataSourceConfig extends RdbmsDataSourceConfig {
 
     @Bean
     public DataSource dataSource() {
-        CloudEnvironment cloudEnvironment = new CloudEnvironment();
+        CloudInfo cloudInfo = new CloudInfo();
 
-        if (cloudEnvironment.isCloudFoundry()) {
-            MysqlServiceInfo serviceInfo = new MysqlServiceInfo(getCloudServiceInfo("mysql"));
-            MysqlServiceCreator serviceCreator = new MysqlServiceCreator();
-            return serviceCreator.createService(serviceInfo);
+        if (cloudInfo.isCloud()) {
+            return cloudInfo.getMySqlDataSource();
         } else {
             return createBasicDataSource("jdbc:mysql://localhost/music", "com.mysql.jdbc.Driver", "", "");
         }
     }
+
 
     @Bean(name = "entityManagerFactory")
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource) {

@@ -1,9 +1,7 @@
 package org.cloudfoundry.samples.music.config.data;
 
 import com.mongodb.MongoClient;
-import org.cloudfoundry.runtime.env.CloudEnvironment;
-import org.cloudfoundry.runtime.env.MongoServiceInfo;
-import org.cloudfoundry.runtime.service.document.MongoServiceCreator;
+import org.cloudfoundry.samples.music.cloud.CloudInfo;
 import org.cloudfoundry.samples.music.repositories.mongodb.MongoAlbumRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,16 +16,14 @@ import java.net.UnknownHostException;
 @Configuration
 @Profile("mongodb")
 @EnableMongoRepositories(basePackageClasses = {MongoAlbumRepository.class})
-public class MongoConfig extends CloudServiceConfig {
+public class MongoConfig {
 
     @Bean
     public MongoDbFactory mongoDbFactory() {
-        CloudEnvironment cloudEnvironment = new CloudEnvironment();
+        CloudInfo cloudInfo = new CloudInfo();
 
-        if (cloudEnvironment.isCloudFoundry()) {
-            MongoServiceInfo serviceInfo = new MongoServiceInfo(getCloudServiceInfo("mongodb"));
-            MongoServiceCreator serviceCreator = new MongoServiceCreator();
-            return serviceCreator.createService(serviceInfo);
+        if (cloudInfo.isCloud()) {
+            return cloudInfo.getMongoDbFactory();
         } else {
             return createMongoDbFactory();
         }
