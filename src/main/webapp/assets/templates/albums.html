@@ -8,8 +8,18 @@
     </div>
 
     <div class="row-fluid">
+        <span> [ view as: </span>
         <a ng-click="setAlbumsView('grid')"><i class="icon-th"></i></a>
         <a ng-click="setAlbumsView('list')"><i class="icon-th-list"></i></a>
+        <span> | sort by: </span>
+        <a href="" ng-click="sortField='name'">name</a>
+        <a href="" ng-click="sortField='artist'">artist</a>
+        <a href="" ng-click="sortField='releaseYear'">year</a>
+        <a href="" ng-click="sortField='genre'">genre</a>
+        <a href="" ng-click="sortDescending=!sortDescending">
+            <i ng-class="{'icon-chevron-up': !sortDescending, 'icon-chevron-down': sortDescending}"></i>
+        </a>
+        <span> ] </span>
     </div>
 
     <div class="row-fluid">

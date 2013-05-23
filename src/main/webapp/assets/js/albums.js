@@ -30,6 +30,8 @@ function AlbumsController($scope, Albums, Album) {
 
     list();
     $scope.setAlbumsView("grid");
+    $scope.sortField = "name";
+    $scope.sortDescending = false;
 }
 
 function success(message) {

@@ -190,15 +190,15 @@
     },
     {
         "_class": "org.cloudfoundry.samples.music.domain.Album",
-        "artist": "Texas Flood",
-        "name": "Stevie Ray Vaughan",
+        "artist": "Stevie Ray Vaughan",
+        "name": "Texas Flood",
         "releaseYear": "1983",
         "genre": "Blues"
     },
     {
         "_class": "org.cloudfoundry.samples.music.domain.Album",
-        "artist": "Couldn't Stand The Weather",
-        "name": "Stevie Ray Vaughan",
+        "artist": "Stevie Ray Vaughan",
+        "name": "Couldn't Stand The Weather",
         "releaseYear": "1984",
         "genre": "Blues"
     }

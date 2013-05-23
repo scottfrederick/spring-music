@@ -1,4 +1,4 @@
-<table class="table table-bordered table-striped">
+<table class="table table-striped">
     <thead>
     <tr>
         <th>Album Name</th>
@@ -9,7 +9,7 @@
     </tr>
     </thead>
     <tbody>
-    <tr ng-repeat="album in albums">
+    <tr ng-repeat="album in albums | orderBy:sortField:sortDescending">
         <td>{{album.name}}</td>
         <td>{{album.artist}}</td>
         <td>{{album.releaseYear}}</td>

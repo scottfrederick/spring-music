@@ -1,13 +1,10 @@
 <ul class="thumbnails">
-    <li class="span3" ng-repeat="album in albums">
+    <li class="span3" ng-repeat="album in albums | orderBy:sortField:sortDescending">
         <div class="thumbnail">
             <h3>{{album.name}}</h3>
             <h4>{{album.artist}}</h4>
-
             <p>{{album.releaseYear}}</p>
-
             <p>{{album.genre}}</p>
-
             <p><a ng-click="delete(album)"><i class="icon-remove"></i></a></p>
         </div>
     </li>
