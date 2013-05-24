@@ -2,203 +2,203 @@
     {
         "_class": "org.cloudfoundry.samples.music.domain.Album",
         "artist": "Nirvana",
-        "name": "Nevermind",
+        "title": "Nevermind",
         "releaseYear": "1991",
         "genre": "Rock"
     },
     {
         "_class": "org.cloudfoundry.samples.music.domain.Album",
         "artist": "The Beach Boys",
-        "name": "Pet Sounds",
+        "title": "Pet Sounds",
         "releaseYear": "1966",
         "genre": "Rock"
     },
     {
         "_class": "org.cloudfoundry.samples.music.domain.Album",
         "artist": "Marvin Gaye",
-        "name": "What's Going On",
+        "title": "What's Going On",
         "releaseYear": "1971",
         "genre": "Rock"
     },
     {
         "_class": "org.cloudfoundry.samples.music.domain.Album",
         "artist": "Jimi Hendrix Experience",
-        "name": "Are You Experienced?",
+        "title": "Are You Experienced?",
         "releaseYear": "1967",
         "genre": "Rock"
     },
     {
         "_class": "org.cloudfoundry.samples.music.domain.Album",
         "artist": "U2",
-        "name": "The Joshua Tree",
+        "title": "The Joshua Tree",
         "releaseYear": "1987",
         "genre": "Rock"
     },
     {
         "_class": "org.cloudfoundry.samples.music.domain.Album",
         "artist": "The Beatles",
-        "name": "Sgt. Pepper's Lonely Hearts Club Band",
-        "releaseYear": "1967",
+        "title": "Abbey Road",
+        "releaseYear": "1969",
         "genre": "Rock"
     },
     {
         "_class": "org.cloudfoundry.samples.music.domain.Album",
         "artist": "Fleetwood Mac",
-        "name": "Rumours",
+        "title": "Rumours",
         "releaseYear": "1977",
         "genre": "Rock"
     },
     {
         "_class": "org.cloudfoundry.samples.music.domain.Album",
         "artist": "Elvis Presley",
-        "name": "Sun Sessions",
+        "title": "Sun Sessions",
         "releaseYear": "1976",
         "genre": "Rock"
     },
     {
         "_class": "org.cloudfoundry.samples.music.domain.Album",
         "artist": "Michael Jackson",
-        "name": "Thriller",
+        "title": "Thriller",
         "releaseYear": "1982",
         "genre": "Pop"
     },
     {
         "_class": "org.cloudfoundry.samples.music.domain.Album",
         "artist": "The Rolling Stones",
-        "name": "Exile on Main Street",
+        "title": "Exile on Main Street",
         "releaseYear": "1972",
         "genre": "Rock"
     },
     {
         "_class": "org.cloudfoundry.samples.music.domain.Album",
         "artist": "Bruce Springsteen",
-        "name": "Born to Run",
+        "title": "Born to Run",
         "releaseYear": "1975",
         "genre": "Rock"
     },
     {
         "_class": "org.cloudfoundry.samples.music.domain.Album",
         "artist": "The Clash",
-        "name": "London Calling",
+        "title": "London Calling",
         "releaseYear": "1980",
         "genre": "Rock"
     },
     {
         "_class": "org.cloudfoundry.samples.music.domain.Album",
         "artist": "The Eagles",
-        "name": "Hotel California",
+        "title": "Hotel California",
         "releaseYear": "1976",
         "genre": "Rock"
     },
     {
         "_class": "org.cloudfoundry.samples.music.domain.Album",
         "artist": "Led Zeppelin",
-        "name": "Led Zeppelin",
+        "title": "Led Zeppelin",
         "releaseYear": "1969",
         "genre": "Rock"
     },
     {
         "_class": "org.cloudfoundry.samples.music.domain.Album",
         "artist": "Led Zeppelin",
-        "name": "IV",
+        "title": "IV",
         "releaseYear": "1971",
         "genre": "Rock"
     },
     {
         "_class": "org.cloudfoundry.samples.music.domain.Album",
         "artist": "Police",
-        "name": "Synchronicity",
+        "title": "Synchronicity",
         "releaseYear": "1983",
         "genre": "Rock"
     },
     {
         "_class": "org.cloudfoundry.samples.music.domain.Album",
         "artist": "U2",
-        "name": "Achtung Baby",
+        "title": "Achtung Baby",
         "releaseYear": "1991",
         "genre": "Rock"
     },
     {
         "_class": "org.cloudfoundry.samples.music.domain.Album",
         "artist": "The Rolling Stones",
-        "name": "Let it Bleed",
+        "title": "Let it Bleed",
         "releaseYear": "1969",
         "genre": "Rock"
     },
     {
         "_class": "org.cloudfoundry.samples.music.domain.Album",
         "artist": "The Beatles",
-        "name": "Rubber Soul",
+        "title": "Rubber Soul",
         "releaseYear": "1965",
         "genre": "Rock"
     },
     {
         "_class": "org.cloudfoundry.samples.music.domain.Album",
         "artist": "The Ramones",
-        "name": "The Ramones",
+        "title": "The Ramones",
         "releaseYear": "1976",
         "genre": "Rock"
     },
     {
         "_class": "org.cloudfoundry.samples.music.domain.Album",
         "artist": "Queen",
-        "name": "A Night At The Opera",
+        "title": "A Night At The Opera",
         "releaseYear": "1975",
         "genre": "Rock"
     },
     {
         "_class": "org.cloudfoundry.samples.music.domain.Album",
         "artist": "Boston",
-        "name": "Don't Look Back",
+        "title": "Don't Look Back",
         "releaseYear": "1978",
         "genre": "Rock"
     },
     {
         "_class": "org.cloudfoundry.samples.music.domain.Album",
         "artist": "BB King",
-        "name": "Singin' The Blues",
+        "title": "Singin' The Blues",
         "releaseYear": "1956",
         "genre": "Blues"
     },
     {
         "_class": "org.cloudfoundry.samples.music.domain.Album",
         "artist": "Albert King",
-        "name": "Born Under A Bad Sign",
+        "title": "Born Under A Bad Sign",
         "releaseYear": "1967",
         "genre": "Blues"
     },
     {
         "_class": "org.cloudfoundry.samples.music.domain.Album",
         "artist": "Muddy Waters",
-        "name": "Folk Singer",
+        "title": "Folk Singer",
         "releaseYear": "1964",
         "genre": "Blues"
     },
     {
         "_class": "org.cloudfoundry.samples.music.domain.Album",
         "artist": "The Fabulous Thunderbirds",
-        "name": "Rock With Me",
+        "title": "Rock With Me",
         "releaseYear": "1979",
         "genre": "Blues"
     },
     {
         "_class": "org.cloudfoundry.samples.music.domain.Album",
         "artist": "Robert Johnson",
-        "name": "King of the Delta Blues",
+        "title": "King of the Delta Blues",
         "releaseYear": "1961",
         "genre": "Blues"
     },
     {
         "_class": "org.cloudfoundry.samples.music.domain.Album",
         "artist": "Stevie Ray Vaughan",
-        "name": "Texas Flood",
+        "title": "Texas Flood",
         "releaseYear": "1983",
         "genre": "Blues"
     },
     {
         "_class": "org.cloudfoundry.samples.music.domain.Album",
         "artist": "Stevie Ray Vaughan",
-        "name": "Couldn't Stand The Weather",
+        "title": "Couldn't Stand The Weather",
         "releaseYear": "1984",
         "genre": "Blues"
     }

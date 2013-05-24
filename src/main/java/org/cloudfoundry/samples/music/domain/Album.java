@@ -15,16 +15,18 @@ public class Album {
     @GenericGenerator(name="randomId", strategy="org.cloudfoundry.samples.music.domain.RandomIdGenerator")
     private String id;
 
-    private String name;
+    private String title;
     private String artist;
     private String releaseYear;
     private String genre;
+    private int trackCount;
+    private String albumId;
 
     public Album() {
     }
 
-    public Album(String firstName, String artist, String releaseYear, String genre) {
-        this.name = firstName;
+    public Album(String title, String artist, String releaseYear, String genre) {
+        this.title = title;
         this.artist = artist;
         this.releaseYear = releaseYear;
         this.genre = genre;
@@ -38,12 +40,12 @@ public class Album {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getArtist() {
@@ -68,5 +70,21 @@ public class Album {
 
     public void setGenre(String genre) {
         this.genre = genre;
+    }
+
+    public int getTrackCount() {
+        return trackCount;
+    }
+
+    public void setTrackCount(int trackCount) {
+        this.trackCount = trackCount;
+    }
+
+    public String getAlbumId() {
+        return albumId;
+    }
+
+    public void setAlbumId(String albumId) {
+        this.albumId = albumId;
     }
 }

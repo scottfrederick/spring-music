@@ -33,7 +33,7 @@ function AlbumsController($scope, Albums, Album) {
         $scope.setAlbumsView("grid");
         $scope.sortField = "name";
         $scope.sortDescending = false;
-    }
+    };
 }
 
 function success(message) {
@@ -42,4 +42,28 @@ function success(message) {
 
 function error(message) {
     return { isError: true, message: message };
+}
+
+function AlbumEditorController($scope, Album) {
+    $scope.enableEditor = function (album, fieldName) {
+        $scope.disableEditor();
+        $scope.newFieldValue = album[fieldName];
+        $scope.editorEnabled[fieldName] = true;
+    };
+
+    $scope.disableEditor = function () {
+        $scope.editorEnabled = {};
+    };
+
+    $scope.save = function (album, fieldName) {
+        if ($scope.newFieldValue === "") {
+            return false;
+        }
+
+        album[fieldName] = $scope.newFieldValue;
+
+        $scope.disableEditor();
+    };
+
+    $scope.disableEditor();
 }
