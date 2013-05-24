@@ -53,7 +53,7 @@ public class CloudInfo {
         return serviceCreator.createService(serviceInfo);
     }
 
-    private Map<String, Object> getServiceInfoForType(String serviceType) {
+    public Map<String, Object> getServiceInfoForType(String serviceType) {
         for (Map<String, Object> service : cloudEnvironment.getServices()) {
             if (service.get("name").toString().contains(serviceType)) {
                 return service;
