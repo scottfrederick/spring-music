@@ -56,11 +56,25 @@ public class CloudInfo {
     public Map<String, Object> getServiceInfoForType(String serviceType) {
         for (Map<String, Object> service : cloudEnvironment.getServices()) {
             if (service.get("name").toString().contains(serviceType)) {
-                return service;
+                return fixupServiceInfo(service);
             }
         }
 
         throw new RuntimeException("Expected exactly one service containing the name [" +
                 serviceType + "] to be bound to the application.");
+    }
+
+    @SuppressWarnings("unchecked")
+    private Map<String, Object> fixupServiceInfo(Map<String, Object> serviceInfo) {
+        Map<String, Object> credentials = (Map<String, Object>) serviceInfo.get("credentials");
+        if (credentials != null) {
+            Object port = credentials.get("port");
+            if (port != null) {
+                // if port is present in credentials, make sure it is an Integer
+                credentials.put("port", Integer.valueOf(port.toString()));
+            }
+        }
+
+        return serviceInfo;
     }
 }
