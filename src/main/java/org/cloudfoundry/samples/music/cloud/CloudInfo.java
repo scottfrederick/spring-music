@@ -1,6 +1,9 @@
 package org.cloudfoundry.samples.music.cloud;
 
+import com.mongodb.Mongo;
+import com.mongodb.MongoURI;
 import org.cloudfoundry.runtime.env.CloudEnvironment;
+import org.cloudfoundry.runtime.env.CloudServiceException;
 import org.cloudfoundry.runtime.env.MongoServiceInfo;
 import org.cloudfoundry.runtime.env.MysqlServiceInfo;
 import org.cloudfoundry.runtime.env.PostgresqlServiceInfo;
@@ -8,8 +11,10 @@ import org.cloudfoundry.runtime.service.document.MongoServiceCreator;
 import org.cloudfoundry.runtime.service.relational.MysqlServiceCreator;
 import org.cloudfoundry.runtime.service.relational.PostgresqlServiceCreator;
 import org.springframework.data.mongodb.MongoDbFactory;
+import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
 
 import javax.sql.DataSource;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -36,7 +41,13 @@ public class CloudInfo {
     }
 
     public MongoDbFactory getMongoDbFactory() {
-        MongoServiceInfo serviceInfo = new MongoServiceInfo(getServiceInfoForType("mongodb"));
+        Map<String, Object> mongoDbServiceInfo = getServiceInfoForType("mongodb");
+        MongoDbFactory mongoDbFactory = getMongoLabsFactory(mongoDbServiceInfo);
+
+        if (mongoDbFactory != null)
+            return mongoDbFactory;
+
+        MongoServiceInfo serviceInfo = new MongoServiceInfo(mongoDbServiceInfo);
         MongoServiceCreator serviceCreator = new MongoServiceCreator();
         return serviceCreator.createService(serviceInfo);
     }
@@ -76,5 +87,24 @@ public class CloudInfo {
         }
 
         return serviceInfo;
+    }
+
+    @SuppressWarnings("unchecked")
+    private MongoDbFactory getMongoLabsFactory(Map<String, Object> mongoDbServiceInfo) {
+        Map<String, Object> credentials = (Map<String, Object>) mongoDbServiceInfo.get("credentials");
+        if (credentials == null) {
+            return null;
+        }
+
+        String mongoLabsUri = (String) credentials.get("mongolabUri");
+        if (mongoLabsUri == null) {
+            return null;
+        }
+
+        try {
+            return new SimpleMongoDbFactory(new MongoURI(mongoLabsUri));
+        } catch (UnknownHostException e) {
+            throw new CloudServiceException("Error creating MongoLabs connection: " + e);
+        }
     }
 }
