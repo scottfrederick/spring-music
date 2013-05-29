@@ -1,6 +1,5 @@
 package org.cloudfoundry.samples.music.cloud;
 
-import com.mongodb.Mongo;
 import com.mongodb.MongoURI;
 import org.cloudfoundry.runtime.env.CloudEnvironment;
 import org.cloudfoundry.runtime.env.CloudServiceException;
@@ -14,11 +13,17 @@ import org.springframework.data.mongodb.MongoDbFactory;
 import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
 
 import javax.sql.DataSource;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * There is much ugliness in this class. This is temporary until the cloudfoundry-runtime library has been updated
+ * to support v2 format of service credentials. You've been warned.
+ */
 public class CloudInfo {
     private CloudEnvironment cloudEnvironment = new CloudEnvironment();
 
@@ -79,6 +84,8 @@ public class CloudInfo {
     private Map<String, Object> fixupServiceInfo(Map<String, Object> serviceInfo) {
         Map<String, Object> credentials = (Map<String, Object>) serviceInfo.get("credentials");
         if (credentials != null) {
+            parseUriCredentials(credentials);
+
             Object port = credentials.get("port");
             if (port != null) {
                 // if port is present in credentials, make sure it is an Integer
@@ -87,6 +94,29 @@ public class CloudInfo {
         }
 
         return serviceInfo;
+    }
+
+    private void parseUriCredentials(Map<String, Object> credentials) {
+        if (credentials.size() == 1 && credentials.containsKey("uri")) {
+            String uriCredential = (String) credentials.get("uri");
+            try {
+                URI uri = new URI(uriCredential);
+
+                credentials.put("hostname", uri.getHost());
+                credentials.put("port", uri.getPort());
+
+                String userInfo = uri.getRawUserInfo();
+                String[] usernamePassword = userInfo.split(":");
+                credentials.put("username", usernamePassword[0]);
+                credentials.put("password", usernamePassword[1]);
+
+                String path = uri.getRawPath().substring(1);
+                credentials.put("name", path);
+                credentials.put("db", path);
+            } catch (URISyntaxException e) {
+                throw new RuntimeException("Expected the single credential to be a value URI: " + uriCredential);
+            }
+        }
     }
 
     @SuppressWarnings("unchecked")
