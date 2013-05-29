@@ -108,6 +108,7 @@ public class CloudInfo {
                 String userInfo = uri.getRawUserInfo();
                 String[] usernamePassword = userInfo.split(":");
                 credentials.put("username", usernamePassword[0]);
+                credentials.put("user", usernamePassword[0]);
                 credentials.put("password", usernamePassword[1]);
 
                 String path = uri.getRawPath().substring(1);
