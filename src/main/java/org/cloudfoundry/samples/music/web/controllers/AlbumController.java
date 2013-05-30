@@ -26,14 +26,14 @@ public class AlbumController {
 
     @ResponseBody
     @RequestMapping(method = RequestMethod.PUT)
-    public String add(@RequestBody @Valid Album album) {
-        return repository.save(album).getId();
+    public Album add(@RequestBody @Valid Album album) {
+        return repository.save(album);
     }
 
     @ResponseBody
     @RequestMapping(method = RequestMethod.POST)
-    public String update(@RequestBody @Valid Album album) {
-        return repository.save(album).getId();
+    public Album update(@RequestBody @Valid Album album) {
+        return repository.save(album);
     }
 
     @ResponseBody

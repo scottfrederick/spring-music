@@ -1,6 +1,8 @@
-<div id="alert" ng-show="status">
-    <div ng-class="{'alert': true, 'alert-success': !status.isError, 'alert-error': status.isError}">
-        <button type="button" class="close" ng-click="status=null"><i class="icon-remove-circle"></i></button>
-        <p>{{status.message}}</p>
+<div id="status" ng-controller="StatusController">
+    <div id="alert" ng-show="status">
+        <div ng-class="{'alert': true, 'alert-success': !status.isError, 'alert-error': status.isError}">
+            <button type="button" class="close" ng-click="clearStatus()"><i class="icon-remove-circle"></i></button>
+            <p>{{status.message}}</p>
+        </div>
     </div>
 </div>

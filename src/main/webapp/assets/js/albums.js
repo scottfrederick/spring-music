@@ -6,8 +6,7 @@ angular.module('albums', ['ngResource']).
         return $resource('albums/:id', {id: '@id'});
     });
 
-function AlbumsController($scope, Albums, Album) {
-
+function AlbumsController($scope, Albums, Album, Status) {
     function list() {
         $scope.albums = Albums.query();
     }
@@ -15,16 +14,16 @@ function AlbumsController($scope, Albums, Album) {
     $scope.delete = function (album) {
         Album.delete({id: album.id},
             function () {
-                $scope.status = success("Album successfully deleted");
+                Status.success("Album deleted");
                 list();
             },
             function (result) {
-                $scope.status = error("Error deleting album: " + result.status);
+                Status.error("Error deleting album: " + result.status);
             }
         );
     };
 
-    $scope.setAlbumsView = function(viewName) {
+    $scope.setAlbumsView = function (viewName) {
         $scope.albumsView = "assets/templates/" + viewName + ".html";
     };
 
@@ -36,15 +35,7 @@ function AlbumsController($scope, Albums, Album) {
     };
 }
 
-function success(message) {
-    return { isError: false, message: message };
-}
-
-function error(message) {
-    return { isError: true, message: message };
-}
-
-function AlbumEditorController($scope, Album) {
+function AlbumEditorController($scope, Albums, Status) {
     $scope.enableEditor = function (album, fieldName) {
         $scope.disableEditor();
         $scope.newFieldValue = album[fieldName];
@@ -62,8 +53,20 @@ function AlbumEditorController($scope, Album) {
 
         album[fieldName] = $scope.newFieldValue;
 
+        Albums.save({}, album,
+            function () {
+                Status.success("Album saved");
+                list();
+            },
+            function (result) {
+                Status.error("Error saving album: " + result.status);
+            }
+        );
+
         $scope.disableEditor();
     };
 
     $scope.disableEditor();
 }
+
+

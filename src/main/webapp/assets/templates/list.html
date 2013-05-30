@@ -9,7 +9,7 @@
     </tr>
     </thead>
     <tbody>
-    <tr ng-repeat="album in albums | orderBy:sortField:sortDescending"  ng-controller="AlbumEditorController">
+    <tr ng-repeat="album in albums | orderBy:sortField:sortDescending" ng-controller="AlbumEditorController">
         <td>
             <span ng-hide="editorEnabled['title']" ng-click="enableEditor(album, 'title')">{{album.title}}</span>
             <span ng-show="editorEnabled['title']">

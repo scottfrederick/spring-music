@@ -1,10 +1,49 @@
 <ul class="thumbnails">
     <li class="span3" ng-repeat="album in albums | orderBy:sortField:sortDescending">
-        <div class="thumbnail">
-            <h3>{{album.title}}</h3>
-            <h4>{{album.artist}}</h4>
-            <p>{{album.releaseYear}}</p>
-            <p>{{album.genre}}</p>
+        <div class="thumbnail" ng-controller="AlbumEditorController">
+            <h3>
+                <span ng-hide="editorEnabled['title']" ng-click="enableEditor(album, 'title')">{{album.title}}</span>
+                <span ng-show="editorEnabled['title']">
+                    <div class="input-append">
+                        <input type="text" name="title" class="input-medium" ng-required ng-model="newFieldValue"/>
+                        <button ng-click="save(album, 'title')" type="button" class="btn"><i class="icon-ok"></i></button>
+                        <button ng-click="disableEditor()" type="button" class="btn"><i class="icon-remove"></i></button>
+                    </div>
+                </span>
+            </h3>
+
+            <h4>
+                <span ng-hide="editorEnabled['artist']" ng-click="enableEditor(album, 'artist')">{{album.artist}}</span>
+                <span ng-show="editorEnabled['artist']">
+                    <div class="input-append">
+                        <input type="text" name="artist" class="input-medium" ng-required ng-model="newFieldValue"/>
+                        <button ng-click="save(album, 'artist')" type="button" class="btn"><i class="icon-ok"></i></button>
+                        <button ng-click="disableEditor()" type="button" class="btn"><i class="icon-remove"></i></button>
+                    </div>
+                </span>
+            </h4>
+
+            <h5>
+                <span ng-hide="editorEnabled['releaseYear']" ng-click="enableEditor(album, 'releaseYear')">{{album.releaseYear}}</span>
+                <span ng-show="editorEnabled['releaseYear']">
+                    <div class="input-append">
+                        <input type="text" name="releaseYear" class="input-small" ng-required ng-model="newFieldValue"/>
+                        <button ng-click="save(album, 'releaseYear')" type="button" class="btn"><i class="icon-ok"></i></button>
+                        <button ng-click="disableEditor()" type="button" class="btn"><i class="icon-remove"></i></button></div>
+                </span>
+            </h5>
+
+            <h5>
+                <span ng-hide="editorEnabled['genre']" ng-click="enableEditor(album, 'genre')">{{album.genre}}</span>
+                <span ng-show="editorEnabled['genre']">
+                    <div class="input-append">
+                        <input type="text" name="genre" class="input-small" ng-required ng-model="newFieldValue"/>
+                        <button ng-click="save(album, 'genre')" type="button" class="btn"><i class="icon-ok"></i></button>
+                        <button ng-click="disableEditor()" type="button" class="btn"><i class="icon-remove"></i></button>
+                    </div>
+                </span>
+            </h5>
+
             <div class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                     <i class="icon-cog"></i>
