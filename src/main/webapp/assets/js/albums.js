@@ -4,6 +4,27 @@ angular.module('albums', ['ngResource']).
     }).
     factory('Album', function ($resource) {
         return $resource('albums/:id', {id: '@id'});
+    }).
+    factory("EditorStatus", function () {
+        var editorEnabled = {};
+
+        var enable = function (id, fieldName) {
+            this.editorEnabled = { 'id': id, 'fieldName': fieldName };
+        };
+
+        var disable = function () {
+            this.editorEnabled = {};
+        };
+
+        var isEnabled = function(id, fieldName) {
+            return (this.editorEnabled['id'] == id && this.editorEnabled['fieldName'] == fieldName);
+        };
+
+        return {
+            isEnabled: isEnabled,
+            enable: enable,
+            disable: disable
+        }
     });
 
 function AlbumsController($scope, Albums, Album, Status) {
@@ -35,15 +56,19 @@ function AlbumsController($scope, Albums, Album, Status) {
     };
 }
 
-function AlbumEditorController($scope, Albums, Status) {
+
+function AlbumEditorController($scope, Albums, Status, EditorStatus) {
     $scope.enableEditor = function (album, fieldName) {
-        $scope.disableEditor();
         $scope.newFieldValue = album[fieldName];
-        $scope.editorEnabled[fieldName] = true;
+        EditorStatus.enable(album.id, fieldName);
     };
 
     $scope.disableEditor = function () {
-        $scope.editorEnabled = {};
+        EditorStatus.disable();
+    };
+
+    $scope.isEditorEnabled = function (album, fieldName) {
+        return EditorStatus.isEnabled(album.id, fieldName);
     };
 
     $scope.save = function (album, fieldName) {
@@ -69,4 +94,36 @@ function AlbumEditorController($scope, Albums, Status) {
     $scope.disableEditor();
 }
 
+angular.module('albums').
+    directive('inPlaceEdit', function () {
+        return {
+            restrict: 'E',
+            transclude: true,
+            replace: true,
 
+            scope: {
+                ipeFieldName: '@fieldName',
+                ipeInputType: '@inputType',
+                ipeInputClass: '@inputClass',
+                ipeModel: '=model'
+            },
+
+            template:
+                '<div>' +
+                    '<span ng-hide="isEditorEnabled(ipeModel, ipeFieldName)" ng-click="enableEditor(ipeModel, ipeFieldName)">' +
+                        '<span ng-transclude></span>' +
+                    '</span>' +
+                    '<span ng-show="isEditorEnabled(ipeModel, ipeFieldName)">' +
+                        '<div class="input-append">' +
+                            '<input type="{{ipeInputType}}" name="{{ipeFieldName}}" class="{{ipeInputClass}}" ' +
+                                'ng-required ng-model="newFieldValue" ' +
+                                'ui-keyup="{enter: \'save(ipeModel, ipeFieldName)\', esc: \'disableEditor()\'}"/>' +
+                            '<button ng-click="save(ipeModel, ipeFieldName)" type="button" class="btn"><i class="icon-ok"></i></button>' +
+                            '<button ng-click="disableEditor()" type="button" class="btn"><i class="icon-remove"></i></button>' +
+                        '</div>' +
+                    '</span>' +
+                '</div>',
+
+            controller: 'AlbumEditorController'
+        };
+    });

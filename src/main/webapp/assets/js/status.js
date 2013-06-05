@@ -1,7 +1,5 @@
 angular.module('status', []).
     factory("Status", function () {
-        console.log("in Status service");
-
         var status = null;
 
         var success = function (message) {
@@ -25,8 +23,6 @@ angular.module('status', []).
     });
 
 function StatusController($scope, Status) {
-    console.log("in StatusController");
-
     $scope.$watch(
         function () {
             return Status.status;
