@@ -97,7 +97,7 @@ public class CloudInfo {
     }
 
     private void parseUriCredentials(Map<String, Object> credentials) {
-        if (credentials.size() == 1 && credentials.containsKey("uri")) {
+        if (credentials.containsKey("uri")) {
             String uriCredential = (String) credentials.get("uri");
             try {
                 URI uri = new URI(uriCredential);

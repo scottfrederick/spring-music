@@ -10,6 +10,10 @@ import java.util.UUID;
 public class RandomIdGenerator implements IdentifierGenerator {
     @Override
     public Serializable generate(SessionImplementor session, Object object) throws HibernateException {
+        return generateId();
+    }
+
+    public String generateId() {
         return UUID.randomUUID().toString();
     }
 }
