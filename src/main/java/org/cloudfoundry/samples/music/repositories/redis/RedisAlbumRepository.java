@@ -3,53 +3,40 @@ package org.cloudfoundry.samples.music.repositories.redis;
 import org.cloudfoundry.samples.music.domain.Album;
 import org.cloudfoundry.samples.music.domain.RandomIdGenerator;
 import org.cloudfoundry.samples.music.repositories.AlbumRepository;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.data.redis.core.HashOperations;
-import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.RedisTemplate;
 
-import java.io.IOException;
-import java.io.StringWriter;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 public class RedisAlbumRepository implements AlbumRepository {
     public static final String ALBUMS_KEY = "albums";
 
     private final RandomIdGenerator idGenerator;
-    private final HashOperations<String, String, String> hashOps;
-    private ObjectMapper objectMapper;
+    private final HashOperations<String, String, Album> hashOps;
 
-    public RedisAlbumRepository(StringRedisTemplate redisTemplate) {
+    public RedisAlbumRepository(RedisTemplate<String, Album> redisTemplate) {
         this.hashOps = redisTemplate.opsForHash();
-
         this.idGenerator = new RandomIdGenerator();
-        this.objectMapper = new ObjectMapper();
     }
 
     @Override
-    public <S extends Album> S save(S entity) {
-        if (entity.getId() == null) {
-            entity.setId(idGenerator.generateId());
+    public <S extends Album> S save(S album) {
+        if (album.getId() == null) {
+            album.setId(idGenerator.generateId());
         }
 
-        try {
-            StringWriter stringWriter = new StringWriter();
-            objectMapper.writeValue(stringWriter, entity);
-            hashOps.put(ALBUMS_KEY, entity.getId(), stringWriter.toString());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        hashOps.put(ALBUMS_KEY, album.getId(), album);
 
-        return entity;
+        return album;
     }
 
     @Override
-    public <S extends Album> Iterable<S> save(Iterable<S> entities) {
+    public <S extends Album> Iterable<S> save(Iterable<S> albums) {
         List<S> result = new ArrayList<S>();
 
-        for (S entity : entities) {
+        for (S entity : albums) {
             save(entity);
             result.add(entity);
         }
@@ -58,76 +45,60 @@ public class RedisAlbumRepository implements AlbumRepository {
     }
 
     @Override
-    public Album findOne(String s) {
-        String stringAlbum = hashOps.get(ALBUMS_KEY, s);
-        try {
-            return objectMapper.readValue(stringAlbum, Album.class);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    public Album findOne(String id) {
+        return hashOps.get(ALBUMS_KEY, id);
     }
 
     @Override
-    public boolean exists(String s) {
-        return findOne(s) != null;
+    public boolean exists(String id) {
+        return hashOps.hasKey(ALBUMS_KEY, id);
     }
 
     @Override
     public Iterable<Album> findAll() {
-        Map<String, String> entries = hashOps.entries(ALBUMS_KEY);
-
-        return createAlbumsFromStrings(entries.values());
+        return hashOps.values(ALBUMS_KEY);
     }
 
     @Override
-    public Iterable<Album> findAll(Iterable<String> strings) {
-        List<String> keys = new ArrayList<String>();
-        for (String string : strings) {
-            keys.add(string);
-        }
-
-        return createAlbumsFromStrings(keys);
-    }
-
-    private List<Album> createAlbumsFromStrings(Collection<String> values) {
-        List<Album> albums = new ArrayList<Album>();
-        for (String value : values) {
-            try {
-                albums.add(objectMapper.readValue(value, Album.class));
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-        return albums;
+    public Iterable<Album> findAll(Iterable<String> ids) {
+        return hashOps.multiGet(ALBUMS_KEY, convertIterableToList(ids));
     }
 
     @Override
     public long count() {
-        return hashOps.entries(ALBUMS_KEY).size();
+        return hashOps.keys(ALBUMS_KEY).size();
     }
 
     @Override
-    public void delete(String s) {
-        hashOps.delete(ALBUMS_KEY, s);
+    public void delete(String id) {
+        hashOps.delete(ALBUMS_KEY, id);
     }
 
     @Override
-    public void delete(Album entity) {
-        hashOps.delete(ALBUMS_KEY, entity.getId());
+    public void delete(Album album) {
+        hashOps.delete(ALBUMS_KEY, album.getId());
     }
 
     @Override
-    public void delete(Iterable<? extends Album> entities) {
-        for (Album album : entities) {
-            hashOps.delete(ALBUMS_KEY, album.getId());
+    public void delete(Iterable<? extends Album> albums) {
+        for (Album album : albums) {
+            delete(album);
         }
     }
 
     @Override
     public void deleteAll() {
-        Map<String, String> entries = hashOps.entries(ALBUMS_KEY);
-        for (String entry : entries.keySet()) {
-            hashOps.delete(ALBUMS_KEY, entry);
+        Set<String> ids = hashOps.keys(ALBUMS_KEY);
+        for (String id : ids) {
+            delete(id);
         }
+    }
+
+    private <T> List<T> convertIterableToList(Iterable<T> iterable) {
+        List<T> list = new ArrayList<T>();
+        for (T object : iterable) {
+            list.add(object);
+        }
+        return list;
     }
 }

@@ -1,12 +1,17 @@
 package org.cloudfoundry.samples.music.config.data;
 
+import org.cloudfoundry.samples.music.cloud.CloudInfo;
+import org.cloudfoundry.samples.music.domain.Album;
 import org.cloudfoundry.samples.music.repositories.redis.RedisAlbumRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
-import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.JacksonJsonRedisSerializer;
+import org.springframework.data.redis.serializer.RedisSerializer;
+import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 @Configuration
 @Profile("redis")
@@ -17,16 +22,30 @@ public class RedisConfig {
     }
 
     @Bean
-    public StringRedisTemplate redisTemplate() {
-        return new StringRedisTemplate(redisConnection());
+    public RedisTemplate<String, Album> redisTemplate() {
+        RedisTemplate<String, Album> template = new RedisTemplate<String, Album>();
+
+        template.setConnectionFactory(redisConnection());
+
+        RedisSerializer<String> stringSerializer = new StringRedisSerializer();
+        RedisSerializer<Album> albumSerializer = new JacksonJsonRedisSerializer<Album>(Album.class);
+
+        template.setKeySerializer(stringSerializer);
+        template.setValueSerializer(albumSerializer);
+        template.setHashKeySerializer(stringSerializer);
+        template.setHashValueSerializer(albumSerializer);
+
+        return template;
     }
 
     @Bean
     public RedisConnectionFactory redisConnection() {
-        JedisConnectionFactory connectionFactory = new JedisConnectionFactory();
-        // connectionFactory.setHostName("");
-        // connectionFactory.setPort(0);
-        // connectionFactory.setPassword("");
-        return connectionFactory;
+        CloudInfo cloudInfo = new CloudInfo();
+
+        if (cloudInfo.isCloud()) {
+            return cloudInfo.getRedisFactory();
+        } else {
+            return new JedisConnectionFactory();
+        }
     }
 }

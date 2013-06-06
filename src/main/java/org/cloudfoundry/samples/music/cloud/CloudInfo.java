@@ -6,11 +6,14 @@ import org.cloudfoundry.runtime.env.CloudServiceException;
 import org.cloudfoundry.runtime.env.MongoServiceInfo;
 import org.cloudfoundry.runtime.env.MysqlServiceInfo;
 import org.cloudfoundry.runtime.env.PostgresqlServiceInfo;
+import org.cloudfoundry.runtime.env.RedisServiceInfo;
 import org.cloudfoundry.runtime.service.document.MongoServiceCreator;
+import org.cloudfoundry.runtime.service.keyvalue.RedisServiceCreator;
 import org.cloudfoundry.runtime.service.relational.MysqlServiceCreator;
 import org.cloudfoundry.runtime.service.relational.PostgresqlServiceCreator;
 import org.springframework.data.mongodb.MongoDbFactory;
 import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
 
 import javax.sql.DataSource;
 import java.net.URI;
@@ -66,6 +69,12 @@ public class CloudInfo {
     public DataSource getPostgresDataSource() {
         PostgresqlServiceInfo serviceInfo = new PostgresqlServiceInfo(getServiceInfoForType("postgres"));
         PostgresqlServiceCreator serviceCreator = new PostgresqlServiceCreator();
+        return serviceCreator.createService(serviceInfo);
+    }
+
+    public RedisConnectionFactory getRedisFactory() {
+        RedisServiceInfo serviceInfo = new RedisServiceInfo((getServiceInfoForType("redis")));
+        RedisServiceCreator serviceCreator = new RedisServiceCreator();
         return serviceCreator.createService(serviceInfo);
     }
 
