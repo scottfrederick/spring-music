@@ -22,10 +22,11 @@ where `<profile>` is one of the following values:
 * `mysql`
 * `postgres`
 * `mongodb`
+* `redis`
 
 If no profile is provided, `in-memory` will be used. If any other profile is provided, the appropriate database server
-must be started separately using default ports. The application will use the host name `localhost` to connect to the
-database.
+must be started separately using default ports. The application will use the host name `localhost` and the default port 
+to connect to the database.
 
 If more than one of these profiles is provided, the application will throw an exception and fail to start.
 
@@ -38,6 +39,7 @@ of the service to see if it contains one of the following values anywhere in the
 * `mysql`
 * `postgres`
 * `mongodb`
+* `redis`
 
 If one of these values is found anywhere in the name of a bound service, then the appropriate Spring profile will be
 configured to use the database service. The connection strings and credentials needed to use the service will be
