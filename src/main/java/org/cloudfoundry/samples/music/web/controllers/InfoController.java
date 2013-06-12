@@ -1,5 +1,6 @@
 package org.cloudfoundry.samples.music.web.controllers;
 
+import org.cloudfoundry.runtime.env.CloudEnvironment;
 import org.cloudfoundry.samples.music.cloud.CloudInfo;
 import org.cloudfoundry.samples.music.domain.ApplicationInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -35,15 +37,8 @@ public class InfoController {
 
     @RequestMapping(value = "/service")
     @ResponseBody
-    public Map<String, Object> showServiceInfo() {
-        for (String profile : springEnvironment.getActiveProfiles()) {
-            try {
-                return cloudInfo.getServiceInfoForType(profile);
-            } catch(Exception e) {
-                // try the next profile, or fall through if none found
-            }
-        }
-
-        return null;
+    public List<Map<String, Object>> showServiceInfo() {
+        CloudEnvironment cloudEnvironment = new CloudEnvironment();
+        return cloudEnvironment.getServices();
     }
 }

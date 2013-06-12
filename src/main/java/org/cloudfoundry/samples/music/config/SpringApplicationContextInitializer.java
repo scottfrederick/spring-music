@@ -1,5 +1,6 @@
 package org.cloudfoundry.samples.music.config;
 
+import org.cloudfoundry.runtime.env.*;
 import org.cloudfoundry.samples.music.cloud.CloudInfo;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.core.env.ConfigurableEnvironment;
@@ -7,16 +8,25 @@ import org.springframework.web.context.support.AnnotationConfigWebApplicationCon
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class SpringApplicationContextInitializer implements ApplicationContextInitializer<AnnotationConfigWebApplicationContext> {
+    private static final Map<Class<? extends AbstractServiceInfo>, String> serviceTypeToProfileName = new
+            HashMap<Class<? extends AbstractServiceInfo>, String>();
+    private static final List<String> validProfiles = Arrays.asList("mysql", "postgres", "mongodb", "redis");
 
     public static final String IN_MEMORY_PROFILE = "in-memory";
 
-    private static final String[] serviceTypes = {"mysql", "postgres", "mongodb", "redis"};
-
     private CloudInfo cloudInfo;
     private ConfigurableEnvironment appEnvironment;
+
+    static {
+        serviceTypeToProfileName.put(MongoServiceInfo.class, "mongodb");
+        serviceTypeToProfileName.put(RdbmsServiceInfo.class, "rdbms");
+        serviceTypeToProfileName.put(RedisServiceInfo.class, "redis");
+    }
 
     @Override
     public void initialize(AnnotationConfigWebApplicationContext applicationContext) {
@@ -25,22 +35,19 @@ public class SpringApplicationContextInitializer implements ApplicationContextIn
 
         String persistenceProfile = IN_MEMORY_PROFILE;
 
-        String[] activeServices;
+        String[] activeProfiles;
         if (isCloudFoundry()) {
-            activeServices = getCloudServices();
-        }
-        else {
-            activeServices = getProfileServices();
+            activeProfiles = getCloudProfiles();
+        } else {
+            activeProfiles = getActiveProfiles();
         }
 
-        String[] services = mapServices(activeServices);
-
-        if (services.length > 0) {
-            if (services.length != 1) {
+        if (activeProfiles.length > 0) {
+            if (activeProfiles.length != 1) {
                 throw new RuntimeException(getConfigurationErrorMessage());
             }
 
-            persistenceProfile = services[0];
+            persistenceProfile = activeProfiles[0];
         }
 
         appEnvironment.addActiveProfile(persistenceProfile);
@@ -50,39 +57,41 @@ public class SpringApplicationContextInitializer implements ApplicationContextIn
         return cloudInfo.isCloud();
     }
 
-    private String[] getCloudServices() {
-        CloudInfo cloudInfo = new CloudInfo();
-        return cloudInfo.getServiceNames();
-    }
+    public String[] getCloudProfiles() {
+        List<String> profiles = new ArrayList<String>();
 
-    private String[] getProfileServices() {
-        return appEnvironment.getActiveProfiles();
-    }
-
-    private String[] mapServices(String[] services) {
-        List<String> foundServices = new ArrayList<String>();
-
-        for (String service : services) {
-            for (String serviceType : serviceTypes) {
-                if (service.contains(serviceType)) {
-                    foundServices.add(serviceType);
-                }
+        AbstractServiceInfo[] serviceInfos = cloudInfo.getAllServiceInfos();
+        for (AbstractServiceInfo serviceInfo : serviceInfos) {
+            if (serviceTypeToProfileName.containsKey(serviceInfo.getClass())) {
+                profiles.add(serviceTypeToProfileName.get(serviceInfo.getClass()));
             }
         }
 
-        return foundServices.toArray(new String[foundServices.size()]);
+        return profiles.toArray(new String[profiles.size()]);
+    }
+
+    private String[] getActiveProfiles() {
+        List<String> serviceProfiles = new ArrayList<String>();
+
+        for (String profile : appEnvironment.getActiveProfiles()) {
+            if (validProfiles.contains(profile)) {
+                serviceProfiles.add(profile);
+            }
+        }
+
+        return serviceProfiles.toArray(new String[serviceProfiles.size()]);
     }
 
     private String getConfigurationErrorMessage() {
         if (isCloudFoundry())
             return "Only one service of the following types may be bound to this application: " +
-                    Arrays.toString(serviceTypes) + ". " +
+                    serviceTypeToProfileName.values().toString() + ". " +
                     "These services are bound to the application: " +
-                    Arrays.toString(getCloudServices());
+                    Arrays.toString(getCloudProfiles());
         else
             return "Only one active Spring profile may be set among the following: " +
-                    Arrays.toString(serviceTypes) + ". " +
+                    validProfiles.toString() + ". " +
                     "These profiles are active: " +
-                    Arrays.toString(appEnvironment.getActiveProfiles());
+                    Arrays.toString(getActiveProfiles());
     }
 }
