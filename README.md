@@ -4,11 +4,13 @@ Spring Music
 This is a sample application for using database services on [Cloud Foundry](http://cloudfoundry.com)
 with [Spring Framework](http://www.springframework.org).
 
+This application has been built to store the same domain objects in one of a variety of different persistence technologies - relational, document, and key-value stores. This is not meant to represent a realistic use case for these technologies, since you would typically choose the one most applicable to the type of data you need to store, but it is useful for testing and experimenting with different types of services on Cloud Foundry. 
+
+The application use Spring Java configuration and [bean profiles](http://static.springsource.org/spring/docs/current/spring-framework-reference/html/new-in-3.1.html#new-in-3.1-bean-definition-profiles) to configure the application and the connection objects needed to use the persistence stores. It also uses the [cloudfoundry-runtime](https://github.com/cloudfoundry/vcap-java/tree/master/cloudfoundry-runtime) library to inspect the environment when running on Cloud Foundry. See the [Cloud Foundry documentation](http://docs.cloudfoundry.com/docs/using/services/spring-service-bindings.html) for details on configuring a Spring application for Cloud Foundry using the cloudfoundry-runtime library.
+
 ## Running the application locally
 
-This application uses [Spring Profiles](http://static.springsource.org/spring/docs/current/spring-framework-reference/html/new-in-3.1.html#new-in-3.1-bean-definition-profiles)
-to select one database provider that the application should use. The database profile is selected by setting the system
-property `spring.profiles.active` when starting the app.
+One Spring bean profile should be activated to choose the database provider that the application should use. The profile is selected by setting the system property `spring.profiles.active` when starting the app.
 
 The application can be started locally using the following command:
 
@@ -25,8 +27,7 @@ where `<profile>` is one of the following values:
 * `redis`
 
 If no profile is provided, `in-memory` will be used. If any other profile is provided, the appropriate database server
-must be started separately using default ports. The application will use the host name `localhost` and the default port 
-to connect to the database.
+must be started separately. The application will use the host name `localhost` and the default port to connect to the database.
 
 If more than one of these profiles is provided, the application will throw an exception and fail to start.
 
@@ -58,19 +59,19 @@ If you don't create and bind a database service when the app is pushed, you can 
 
 ~~~
 $ cf create-service
-<choose a database service from the list>
+<follow the prompts to choose a database service>
 $ cf bind-service
-<choose the spring-music app and the created database service>
+<follow the prompts to choose the spring-music app and the created database service>
+$ cf restart
 ~~~
 
 To test the application with different services, you can simply stop the app, unbind a service, bind a different
 database service, and start the app:
 
 ~~~
-$ cf stop
 $ cf unbind-service
-<choose the spring-music app, and a service to unbind from the app>
+<follow the prompts to choose the spring-music app, and a service to unbind from the app>
 $ cf bind-service
-<choose the spring-music app, and a differet service to bind>
-$ cf start
+<follow the prompts to choose the spring-music app, and a differet service to bind>
+$ cf restart
 ~~~
