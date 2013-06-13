@@ -33,17 +33,9 @@ If more than one of these profiles is provided, the application will throw an ex
 ## Running the application on Cloud Foundry
 
 When running on Cloud Foundry, the application will detect the type of database service bound to the application
-(if any) and configure the appropriate Spring profile automatically. This is currently done by inspecting the name
-of the service to see if it contains one of the following values anywhere in the name:
-
-* `mysql`
-* `postgres`
-* `mongodb`
-* `redis`
-
-If one of these values is found anywhere in the name of a bound service, then the appropriate Spring profile will be
-configured to use the database service. The connection strings and credentials needed to use the service will be
-extracted from the Cloud Foundry environment.
+(if any). If a service of one of the supported types (MySQL, Postgres, MongoDB, or Redis) is bound to the app, the
+appropriate Spring profile will be configured to use the database service. The connection strings and credentials
+needed to use the service will be extracted from the Cloud Foundry environment.
 
 If no bound services are found containing any of these values in the name, then the `in-memory` profile will be used.
 
@@ -66,10 +58,19 @@ If you don't create and bind a database service when the app is pushed, you can 
 
 ~~~
 $ cf create-service
-<choose a database service from the list; be sure to include the appropriate profile in the name>
+<choose a database service from the list>
 $ cf bind-service
-<choose the created database service and the spring-music application>
+<choose the spring-music app and the created database service>
 ~~~
 
 To test the application with different services, you can simply stop the app, unbind a service, bind a different
-database service, and start the app.
+database service, and start the app:
+
+~~~
+$ cf stop
+$ cf unbind-service
+<choose the spring-music app, and a service to unbind from the app>
+$ cf bind-service
+<choose the spring-music app, and a differet service to bind>
+$ cf start
+~~~

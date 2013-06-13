@@ -1,25 +1,20 @@
 package org.cloudfoundry.samples.music.config;
 
 import org.cloudfoundry.runtime.env.*;
-import org.cloudfoundry.samples.music.cloud.CloudInfo;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class SpringApplicationContextInitializer implements ApplicationContextInitializer<AnnotationConfigWebApplicationContext> {
-    private static final Map<Class<? extends AbstractServiceInfo>, String> serviceTypeToProfileName = new
-            HashMap<Class<? extends AbstractServiceInfo>, String>();
+    private static final Map<Class<? extends AbstractServiceInfo>, String> serviceTypeToProfileName =
+            new HashMap<Class<? extends AbstractServiceInfo>, String>();
     private static final List<String> validProfiles = Arrays.asList("mysql", "postgres", "mongodb", "redis");
 
     public static final String IN_MEMORY_PROFILE = "in-memory";
 
-    private CloudInfo cloudInfo;
+    private CloudEnvironment cloudEnvironment = new CloudEnvironment();
     private ConfigurableEnvironment appEnvironment;
 
     static {
@@ -30,7 +25,6 @@ public class SpringApplicationContextInitializer implements ApplicationContextIn
 
     @Override
     public void initialize(AnnotationConfigWebApplicationContext applicationContext) {
-        cloudInfo = new CloudInfo();
         appEnvironment = applicationContext.getEnvironment();
 
         String persistenceProfile = IN_MEMORY_PROFILE;
@@ -54,13 +48,13 @@ public class SpringApplicationContextInitializer implements ApplicationContextIn
     }
 
     private boolean isCloudFoundry() {
-        return cloudInfo.isCloud();
+        return cloudEnvironment.isCloudFoundry();
     }
 
     public String[] getCloudProfiles() {
         List<String> profiles = new ArrayList<String>();
 
-        AbstractServiceInfo[] serviceInfos = cloudInfo.getAllServiceInfos();
+        List<AbstractServiceInfo> serviceInfos = getAllServiceInfos();
         for (AbstractServiceInfo serviceInfo : serviceInfos) {
             if (serviceTypeToProfileName.containsKey(serviceInfo.getClass())) {
                 profiles.add(serviceTypeToProfileName.get(serviceInfo.getClass()));
@@ -68,6 +62,16 @@ public class SpringApplicationContextInitializer implements ApplicationContextIn
         }
 
         return profiles.toArray(new String[profiles.size()]);
+    }
+
+    public List<AbstractServiceInfo> getAllServiceInfos() {
+        List<AbstractServiceInfo> serviceInfos = new ArrayList<AbstractServiceInfo>();
+
+        serviceInfos.addAll(cloudEnvironment.getServiceInfos(RdbmsServiceInfo.class));
+        serviceInfos.addAll(cloudEnvironment.getServiceInfos(MongoServiceInfo.class));
+        serviceInfos.addAll(cloudEnvironment.getServiceInfos(RedisServiceInfo.class));
+
+        return serviceInfos;
     }
 
     private String[] getActiveProfiles() {

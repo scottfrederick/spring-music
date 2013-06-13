@@ -1,6 +1,8 @@
 package org.cloudfoundry.samples.music.config.data;
 
-import org.cloudfoundry.samples.music.cloud.CloudInfo;
+import org.cloudfoundry.runtime.env.CloudEnvironment;
+import org.cloudfoundry.runtime.env.RedisServiceInfo;
+import org.cloudfoundry.runtime.service.keyvalue.RedisServiceCreator;
 import org.cloudfoundry.samples.music.domain.Album;
 import org.cloudfoundry.samples.music.repositories.redis.RedisAlbumRepository;
 import org.springframework.context.annotation.Bean;
@@ -12,6 +14,8 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.JacksonJsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
+
+import java.util.List;
 
 @Configuration
 @Profile("redis")
@@ -40,10 +44,12 @@ public class RedisConfig {
 
     @Bean
     public RedisConnectionFactory redisConnection() {
-        CloudInfo cloudInfo = new CloudInfo();
+        CloudEnvironment cloudEnvironment = new CloudEnvironment();
 
-        if (cloudInfo.isCloud()) {
-            return cloudInfo.getRedisFactory();
+        if (cloudEnvironment.isCloudFoundry()) {
+            List<RedisServiceInfo> serviceInfo = cloudEnvironment.getServiceInfos(RedisServiceInfo.class);
+            RedisServiceCreator serviceCreator = new RedisServiceCreator();
+            return serviceCreator.createService(serviceInfo.get(0));
         } else {
             return new JedisConnectionFactory();
         }
