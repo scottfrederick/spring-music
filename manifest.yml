@@ -3,6 +3,7 @@ applications:
 - name: spring-music
   memory: 512M
   instances: 1
-  url: spring-music.${target-base}
+  host: spring-music-${random-word}
+  domain: cfapps.io
   path: build/libs/spring-music.war
 

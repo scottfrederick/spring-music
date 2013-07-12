@@ -52,6 +52,21 @@ $ ./gradlew assemble
 $ cf push --path=build/libs/spring-music.war
 ~~~
 
+The application will be pushed using settings in the provided manifest.yml file. The settings include some random 
+characters in the host to make sure the URL for the app is unique in the Cloud Foundry environment. Once the app is 
+uploaded and finishes staging, run the following command to see the URL that was assigned:
+
+~~~
+$ cf app
+Using manifest file manifest.yml
+
+spring-music: running
+  usage: 512M × 1 instance
+  urls: spring-music-7acab.cfapps.io
+~~~
+
+Using the provided URL in the urls field displayed, you can browse to the running application.
+
 You can bind the application to a database service when it is pushed, or you can run it without a bound service (in
 the `in-memory` profile).
 
