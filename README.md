@@ -49,7 +49,7 @@ targeting a Cloud Foundry instance, and logging in, the application can be pushe
 ~~~
 $ ./gradlew assemble
 
-$ cf push --path=build/libs/spring-music.war
+$ cf push
 ...
 Push successful! App 'spring-music' available at http://spring-music-db130.cfapps.io
 ~~~
