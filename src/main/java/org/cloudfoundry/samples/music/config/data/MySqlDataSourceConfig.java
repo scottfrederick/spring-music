@@ -1,6 +1,8 @@
 package org.cloudfoundry.samples.music.config.data;
 
 import org.hibernate.dialect.MySQL5Dialect;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.Cloud;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -16,9 +18,16 @@ import javax.sql.DataSource;
 @EnableJpaRepositories("org.cloudfoundry.samples.music.repositories.jpa")
 public class MySqlDataSourceConfig extends AbstractDataSourceConfig {
 
+    @Autowired(required = false)
+    private Cloud cloud = null;
+
     @Bean
     public DataSource dataSource() {
-        return createBasicDataSource("jdbc:mysql://localhost/music", "com.mysql.jdbc.Driver", "", "");
+        if (cloud != null) {
+            return cloud.getSingletonServiceConnector(DataSource.class, null);
+        } else {
+            return createBasicDataSource("jdbc:mysql://localhost/music", "com.mysql.jdbc.Driver", "", "");
+        }
     }
 
     @Bean(name = "entityManagerFactory")

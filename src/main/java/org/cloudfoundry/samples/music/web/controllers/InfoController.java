@@ -1,8 +1,9 @@
 package org.cloudfoundry.samples.music.web.controllers;
 
-import org.cloudfoundry.runtime.env.CloudEnvironment;
 import org.cloudfoundry.samples.music.domain.ApplicationInfo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.Cloud;
+import org.springframework.cloud.service.ServiceInfo;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,6 +15,9 @@ import java.util.Map;
 
 @Controller
 public class InfoController {
+    @Autowired(required = false)
+    private Cloud cloud;
+
     private Environment springEnvironment;
 
     @Autowired
@@ -35,21 +39,21 @@ public class InfoController {
 
     @RequestMapping(value = "/service")
     @ResponseBody
-    public List<Map<String, Object>> showServiceInfo() {
-        CloudEnvironment cloudEnvironment = new CloudEnvironment();
-        return cloudEnvironment.getServices();
+    public List<ServiceInfo> showServiceInfo() {
+        if (cloud != null) {
+            return cloud.getServiceInfos();
+        } else {
+            return new ArrayList<ServiceInfo>();
+        }
     }
 
-
     private String[] getServiceNames() {
-        CloudEnvironment cloudEnvironment = new CloudEnvironment();
-
-        if (cloudEnvironment.isCloudFoundry()) {
-            List<Map<String, Object>> services = cloudEnvironment.getServices();
+        if (cloud != null) {
+            final List<ServiceInfo> serviceInfos = cloud.getServiceInfos();
 
             List<String> names = new ArrayList<String>();
-            for (Map<String, Object> service : services) {
-                names.add(service.get("name").toString());
+            for (ServiceInfo serviceInfo : serviceInfos) {
+                names.add(serviceInfo.getId());
             }
             return names.toArray(new String[names.size()]);
         } else {
