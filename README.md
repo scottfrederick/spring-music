@@ -2,7 +2,7 @@ Spring Music
 ============
 
 This is a sample application for using database services on [Cloud Foundry](http://cloudfoundry.com)
-with [Spring Framework](http://www.springframework.org).
+with the [Spring Framework](http://www.springframework.org).
 
 This application has been built to store the same domain objects in one of a variety of different persistence technologies - relational, document, and key-value stores. This is not meant to represent a realistic use case for these technologies, since you would typically choose the one most applicable to the type of data you need to store, but it is useful for testing and experimenting with different types of services on Cloud Foundry. 
 
@@ -43,25 +43,24 @@ If no bound services are found containing any of these values in the name, then 
 If more than one service containing any of these values is bound to the application, the application will throw an
 exception and fail to start.
 
-After installing in the 'cf' [command-line interface for Cloud Foundry](http://docs.cloudfoundry.com/docs/using/managing-apps/cf/),
-targeting a Cloud Foundry instance, and logging in, the application can be pushed using these commands:
+After installing the 'cf' [command-line interface for Cloud Foundry](http://docs.cloudfoundry.com/docs/using/managing-apps/cf/),
+targeting a Cloud Foundry instance, and logging in, the application can be built and pushed using these commands:
 
 ~~~
 $ ./gradlew assemble
 
-$ cf push --path=build/libs/spring-music.war
+$ cf push
 ...
 Push successful! App 'spring-music' available at http://spring-music-db130.cfapps.io
 ~~~
 
-The application will be pushed using settings in the provided manifest.yml file. The settings include some random 
-characters in the host to make sure the URL for the app is unique in the Cloud Foundry environment. The last line of the ouput will
-show the URL that has been assigned to the application. 
+The application will be pushed using settings in the provided `manifest.yml` file. The settings include some random 
+characters in the host to make sure the URL for the app is unique in the Cloud Foundry environment. The last line of the ouput will show the URL that has been assigned to the application. 
 
 You can bind the application to a database service when it is pushed, or you can run it without a bound service (in
 the `in-memory` profile).
 
-If you don't create and bind a database service when the app is pushed, you can do this later using these commands:
+If you do not create and bind a database service when the app is pushed, you can do this later using these commands:
 
 ~~~
 $ cf create-service
