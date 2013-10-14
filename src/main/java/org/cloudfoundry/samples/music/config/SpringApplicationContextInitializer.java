@@ -35,18 +35,20 @@ public class SpringApplicationContextInitializer implements ApplicationContextIn
 
         ConfigurableEnvironment appEnvironment = applicationContext.getEnvironment();
 
-        String persistenceProfile = getCloudProfile(cloud);
-        if (persistenceProfile == null) {
-            persistenceProfile = getActiveProfile(appEnvironment);
+        String[] persistenceProfiles = getCloudProfile(cloud);
+        if (persistenceProfiles == null) {
+            persistenceProfiles = getActiveProfile(appEnvironment);
         }
-        if (persistenceProfile == null) {
-            persistenceProfile = IN_MEMORY_PROFILE;
+        if (persistenceProfiles == null) {
+            persistenceProfiles = new String[] { IN_MEMORY_PROFILE };
         }
 
-        appEnvironment.addActiveProfile(persistenceProfile);
+        for (String persistenceProfile : persistenceProfiles) {
+            appEnvironment.addActiveProfile(persistenceProfile);
+        }
     }
 
-    public String getCloudProfile(Cloud cloud) {
+    public String[] getCloudProfile(Cloud cloud) {
         if (cloud == null) {
             return null;
         }
@@ -68,7 +70,11 @@ public class SpringApplicationContextInitializer implements ApplicationContextIn
                             StringUtils.collectionToCommaDelimitedString(profiles) + "]");
         }
 
-        return (profiles.size() > 0) ? profiles.get(0) : null;
+        if (profiles.size() > 0) {
+            return new String[] { profiles.get(0), profiles.get(0) + "-cloud" };
+        }
+
+        return null;
     }
 
     private Cloud getCloud() {
@@ -80,7 +86,7 @@ public class SpringApplicationContextInitializer implements ApplicationContextIn
         }
     }
 
-    private String getActiveProfile(ConfigurableEnvironment appEnvironment) {
+    private String[] getActiveProfile(ConfigurableEnvironment appEnvironment) {
         List<String> serviceProfiles = new ArrayList<String>();
 
         for (String profile : appEnvironment.getActiveProfiles()) {
@@ -96,6 +102,10 @@ public class SpringApplicationContextInitializer implements ApplicationContextIn
                     StringUtils.collectionToCommaDelimitedString(serviceProfiles) + "]");
         }
 
-        return (serviceProfiles.size() > 0) ? serviceProfiles.get(0) : null;
+        if (serviceProfiles.size() > 0) {
+            return new String[] { serviceProfiles.get(0), serviceProfiles.get(0) + "-local" };
+        }
+
+        return null;
     }
 }

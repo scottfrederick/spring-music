@@ -7,7 +7,7 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 
 @Configuration
-@Profile({"redis", "!cloud"})
+@Profile("redis-local")
 public class RedisLocalConfig {
 
     @Bean

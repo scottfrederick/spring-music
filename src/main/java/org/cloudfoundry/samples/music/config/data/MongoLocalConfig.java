@@ -10,7 +10,7 @@ import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
 import java.net.UnknownHostException;
 
 @Configuration
-@Profile({"mongodb", "!cloud"})
+@Profile("mongodb-local")
 public class MongoLocalConfig {
 
     @Bean

@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Profile;
 import javax.sql.DataSource;
 
 @Configuration
-@Profile({"postgres", "!cloud"})
+@Profile("postgres-local")
 public class PostgresLocalDataSourceConfig extends AbstractDataSourceConfig {
 
     @Bean

@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.data.mongodb.MongoDbFactory;
 
 @Configuration
-@Profile({"mongodb", "cloud"})
+@Profile("mongodb-cloud")
 public class MongoCloudConfig extends AbstractCloudConfig {
 
     @Bean

@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Profile;
 import javax.sql.DataSource;
 
 @Configuration
-@Profile({"postgres", "cloud"})
+@Profile("postgres-cloud")
 public class PostgresCloudDataSourceConfig extends AbstractCloudConfig {
 
     @Bean

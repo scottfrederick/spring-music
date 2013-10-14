@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Profile;
 import javax.sql.DataSource;
 
 @Configuration
-@Profile({"mysql", "cloud"})
+@Profile("mysql-cloud")
 public class MySqlCloudDataSourceConfig extends AbstractCloudConfig {
 
     @Bean

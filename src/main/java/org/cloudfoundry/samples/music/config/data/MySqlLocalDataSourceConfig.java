@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Profile;
 import javax.sql.DataSource;
 
 @Configuration
-@Profile({"mysql", "!cloud"})
+@Profile("mysql-local")
 public class MySqlLocalDataSourceConfig extends AbstractDataSourceConfig {
 
     @Bean
