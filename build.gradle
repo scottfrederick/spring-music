@@ -6,6 +6,8 @@ apply plugin: 'idea'
 apply plugin: 'tomcat'
 apply plugin: 'war'
 
+apply plugin: 'cloudfoundry'
+
 sourceCompatibility = 1.6
 version = '1.0'
 
@@ -34,6 +36,7 @@ buildscript {
 
     dependencies {
         classpath 'org.gradle.api.plugins:gradle-tomcat-plugin:0.9.8'
+        classpath 'org.cloudfoundry:cf-gradle-plugin:1.0.0'
     }
 }
 
@@ -103,3 +106,23 @@ war {
 tomcatRun {
     outputFile = file('tomcat.log')
 }
+
+cloudfoundry {
+    target = "https://api.run.pivotal.io"
+    space = "development"
+    file = file("build/libs/spring-music.war")
+    uri = "spring-music-${randomWord}.cfapps.io"
+    memory = 512
+    instances = 1
+    
+    serviceInfos {
+        "music-mongodb" {
+            label = "mongolab"
+            provider = "mongolab"
+            version = "n/a"
+            plan = "sandbox"
+            bind = true
+        }
+    }
+}
+
