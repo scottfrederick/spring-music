@@ -8,7 +8,7 @@ import javax.sql.DataSource;
 
 @Configuration
 @Profile("postgres-local")
-public class PostgresLocalDataSourceConfig extends AbstractDataSourceConfig {
+public class PostgresLocalDataSourceConfig extends AbstractLocalDataSourceConfig {
 
     @Bean
     public DataSource dataSource() {

@@ -8,7 +8,7 @@ import javax.sql.DataSource;
 
 @Configuration
 @Profile("mysql-local")
-public class MySqlLocalDataSourceConfig extends AbstractDataSourceConfig {
+public class MySqlLocalDataSourceConfig extends AbstractLocalDataSourceConfig {
 
     @Bean
     public DataSource dataSource() {

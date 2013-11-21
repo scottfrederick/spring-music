@@ -1,24 +1,29 @@
 package org.cloudfoundry.samples.music.config.data;
 
-import org.apache.commons.dbcp.BasicDataSource;
 import org.cloudfoundry.samples.music.domain.Album;
 import org.hibernate.ejb.HibernatePersistence;
+import org.springframework.context.annotation.Bean;
+import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 
+import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 import java.util.HashMap;
 import java.util.Map;
 
-public class AbstractDataSourceConfig {
+public abstract class AbstractJpaRepositoryConfig {
 
-    protected BasicDataSource createBasicDataSource(String jdbcUrl, String driverClass, String userName, String password) {
-        BasicDataSource dataSource = new BasicDataSource();
-        dataSource.setUrl(jdbcUrl);
-        dataSource.setDriverClassName(driverClass);
-        dataSource.setUsername(userName);
-        dataSource.setPassword(password);
-        return dataSource;
+    @Bean(name = "entityManagerFactory")
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource) {
+        return createEntityManagerFactoryBean(dataSource, getHibernateDialect());
     }
+
+    @Bean(name = "transactionManager")
+    public JpaTransactionManager transactionManager(EntityManagerFactory entityManagerFactory) {
+        return new JpaTransactionManager(entityManagerFactory);
+    }
+
+    protected abstract String getHibernateDialect();
 
     protected LocalContainerEntityManagerFactoryBean createEntityManagerFactoryBean(DataSource dataSource, String dialectClassName) {
         Map<String, String> properties = new HashMap<String, String>();

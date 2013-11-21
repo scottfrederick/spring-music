@@ -18,7 +18,7 @@ import java.util.*;
 public class SpringApplicationContextInitializer implements ApplicationContextInitializer<AnnotationConfigWebApplicationContext> {
     private static final Map<Class<? extends ServiceInfo>, String> serviceTypeToProfileName =
             new HashMap<Class<? extends ServiceInfo>, String>();
-    private static final List<String> validProfiles = Arrays.asList("mysql", "postgres", "mongodb", "redis");
+    private static final List<String> validLocalProfiles = Arrays.asList("mysql", "postgres", "mongodb", "redis");
 
     public static final String IN_MEMORY_PROFILE = "in-memory";
 
@@ -90,14 +90,14 @@ public class SpringApplicationContextInitializer implements ApplicationContextIn
         List<String> serviceProfiles = new ArrayList<String>();
 
         for (String profile : appEnvironment.getActiveProfiles()) {
-            if (validProfiles.contains(profile)) {
+            if (validLocalProfiles.contains(profile)) {
                 serviceProfiles.add(profile);
             }
         }
 
         if (serviceProfiles.size() > 1) {
             throw new IllegalStateException("Only one active Spring profile may be set among the following: " +
-                    validProfiles.toString() + ". " +
+                    validLocalProfiles.toString() + ". " +
                     "These profiles are active: [" +
                     StringUtils.collectionToCommaDelimitedString(serviceProfiles) + "]");
         }

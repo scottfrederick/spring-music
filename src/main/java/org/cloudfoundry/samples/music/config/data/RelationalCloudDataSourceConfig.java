@@ -8,8 +8,8 @@ import org.springframework.context.annotation.Profile;
 import javax.sql.DataSource;
 
 @Configuration
-@Profile("postgres-cloud")
-public class PostgresCloudDataSourceConfig extends AbstractCloudConfig {
+@Profile("mysql-cloud,postgres-cloud")
+public class RelationalCloudDataSourceConfig extends AbstractCloudConfig {
 
     @Bean
     public DataSource dataSource() {
