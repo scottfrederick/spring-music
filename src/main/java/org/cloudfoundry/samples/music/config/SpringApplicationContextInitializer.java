@@ -1,5 +1,7 @@
 package org.cloudfoundry.samples.music.config;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.cloud.Cloud;
 import org.springframework.cloud.CloudException;
 import org.springframework.cloud.CloudFactory;
@@ -16,6 +18,9 @@ import org.springframework.web.context.support.AnnotationConfigWebApplicationCon
 import java.util.*;
 
 public class SpringApplicationContextInitializer implements ApplicationContextInitializer<AnnotationConfigWebApplicationContext> {
+
+    private static final Log logger = LogFactory.getLog(SpringApplicationContextInitializer.class);
+
     private static final Map<Class<? extends ServiceInfo>, String> serviceTypeToProfileName =
             new HashMap<Class<? extends ServiceInfo>, String>();
     private static final List<String> validLocalProfiles = Arrays.asList("mysql", "postgres", "mongodb", "redis");
@@ -56,6 +61,9 @@ public class SpringApplicationContextInitializer implements ApplicationContextIn
         List<String> profiles = new ArrayList<String>();
 
         List<ServiceInfo> serviceInfos = cloud.getServiceInfos();
+
+        logger.info("Found serviceInfos: " + StringUtils.collectionToCommaDelimitedString(serviceInfos));
+
         for (ServiceInfo serviceInfo : serviceInfos) {
             if (serviceTypeToProfileName.containsKey(serviceInfo.getClass())) {
                 profiles.add(serviceTypeToProfileName.get(serviceInfo.getClass()));
@@ -71,7 +79,7 @@ public class SpringApplicationContextInitializer implements ApplicationContextIn
         }
 
         if (profiles.size() > 0) {
-            return new String[] { profiles.get(0), profiles.get(0) + "-cloud" };
+            return createProfileNames(profiles.get(0), "cloud");
         }
 
         return null;
@@ -103,9 +111,15 @@ public class SpringApplicationContextInitializer implements ApplicationContextIn
         }
 
         if (serviceProfiles.size() > 0) {
-            return new String[] { serviceProfiles.get(0), serviceProfiles.get(0) + "-local" };
+            return createProfileNames(serviceProfiles.get(0), "local");
         }
 
         return null;
+    }
+
+    private String[] createProfileNames(String baseName, String suffix) {
+        String[] profileNames = {baseName, baseName + "-" + suffix};
+        logger.info("Setting profile names: " + StringUtils.arrayToCommaDelimitedString(profileNames));
+        return profileNames;
     }
 }
