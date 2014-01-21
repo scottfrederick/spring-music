@@ -1,5 +1,7 @@
 package org.cloudfoundry.samples.music.config;
 
+import org.cloudfoundry.samples.music.cloud.OracleServiceInfo;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.cloud.Cloud;
@@ -23,7 +25,7 @@ public class SpringApplicationContextInitializer implements ApplicationContextIn
 
     private static final Map<Class<? extends ServiceInfo>, String> serviceTypeToProfileName =
             new HashMap<Class<? extends ServiceInfo>, String>();
-    private static final List<String> validLocalProfiles = Arrays.asList("mysql", "postgres", "mongodb", "redis");
+    private static final List<String> validLocalProfiles = Arrays.asList("mysql", "postgres", "mongodb", "redis", "oracle");
 
     public static final String IN_MEMORY_PROFILE = "in-memory";
 
@@ -32,6 +34,7 @@ public class SpringApplicationContextInitializer implements ApplicationContextIn
         serviceTypeToProfileName.put(PostgresqlServiceInfo.class, "postgres");
         serviceTypeToProfileName.put(MysqlServiceInfo.class, "mysql");
         serviceTypeToProfileName.put(RedisServiceInfo.class, "redis");
+        serviceTypeToProfileName.put(OracleServiceInfo.class, "oracle");
     }
 
     @Override

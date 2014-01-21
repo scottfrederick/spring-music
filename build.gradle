@@ -53,8 +53,8 @@ dependencies {
     compile 'org.codehaus.jackson:jackson-mapper-asl:1.9.8'
 
     // Spring Cloud
-    compile 'org.springframework.cloud:spring-service-connector:0.9.2'
-    compile 'org.springframework.cloud:cloudfoundry-connector:0.9.2'
+    compile 'org.springframework.cloud:spring-service-connector:0.9.4'
+    compile 'org.springframework.cloud:cloudfoundry-connector:0.9.4'
 
     // Spring Data
     compile 'org.springframework.data:spring-data-jpa:1.4.3.RELEASE'
