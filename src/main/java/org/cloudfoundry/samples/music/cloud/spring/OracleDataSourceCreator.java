@@ -1,7 +1,7 @@
-package org.cloudfoundry.samples.music.cloud;
+package org.cloudfoundry.samples.music.cloud.spring;
 
-import org.cloudfoundry.samples.music.cloud.OracleServiceInfo;
 import org.springframework.cloud.service.relational.DataSourceCreator;
+import org.cloudfoundry.samples.music.cloud.common.OracleServiceInfo;
 
 public class OracleDataSourceCreator extends DataSourceCreator<OracleServiceInfo> {
     private static final String[] DRIVERS = new String[]{"oracle.jdbc.OracleDriver"};

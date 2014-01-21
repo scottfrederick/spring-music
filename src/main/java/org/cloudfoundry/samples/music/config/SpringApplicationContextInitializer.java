@@ -1,6 +1,6 @@
 package org.cloudfoundry.samples.music.config;
 
-import org.cloudfoundry.samples.music.cloud.OracleServiceInfo;
+import org.cloudfoundry.samples.music.cloud.common.OracleServiceInfo;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

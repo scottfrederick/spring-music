@@ -1,4 +1,4 @@
-package org.cloudfoundry.samples.music.cloud;
+package org.cloudfoundry.samples.music.cloud.common;
 
 import org.springframework.cloud.service.ServiceInfo.ServiceLabel;
 import org.springframework.cloud.service.common.RelationalServiceInfo;

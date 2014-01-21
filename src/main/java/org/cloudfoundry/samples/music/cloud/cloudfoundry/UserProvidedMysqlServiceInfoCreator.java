@@ -1,4 +1,4 @@
-package org.cloudfoundry.samples.music.cloud;
+package org.cloudfoundry.samples.music.cloud.cloudfoundry;
 
 import org.springframework.cloud.cloudfoundry.CloudFoundryServiceInfoCreator;
 import org.springframework.cloud.service.common.MysqlServiceInfo;
