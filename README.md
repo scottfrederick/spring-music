@@ -6,7 +6,7 @@ with the [Spring Framework](http://www.springframework.org).
 
 This application has been built to store the same domain objects in one of a variety of different persistence technologies - relational, document, and key-value stores. This is not meant to represent a realistic use case for these technologies, since you would typically choose the one most applicable to the type of data you need to store, but it is useful for testing and experimenting with different types of services on Cloud Foundry. 
 
-The application use Spring Java configuration and [bean profiles](http://static.springsource.org/spring/docs/current/spring-framework-reference/html/new-in-3.1.html#new-in-3.1-bean-definition-profiles) to configure the application and the connection objects needed to use the persistence stores. It also uses the [cloudfoundry-runtime](https://github.com/cloudfoundry/vcap-java/tree/master/cloudfoundry-runtime) library to inspect the environment when running on Cloud Foundry. See the [Cloud Foundry documentation](http://docs.cloudfoundry.com/docs/using/services/spring-service-bindings.html) for details on configuring a Spring application for Cloud Foundry using the cloudfoundry-runtime library.
+The application use Spring Java configuration and [bean profiles](http://static.springsource.org/spring/docs/current/spring-framework-reference/html/new-in-3.1.html#new-in-3.1-bean-definition-profiles) to configure the application and the connection objects needed to use the persistence stores. It also uses the [Spring Cloud](https://github.com/spring-projects/spring-cloud) library to inspect the environment when running on Cloud Foundry. See the [Cloud Foundry documentation](http://docs.cloudfoundry.com/docs/using/services/spring-service-bindings.html) for details on configuring a Spring application for Cloud Foundry.
 
 ## Running the application locally
 
@@ -101,7 +101,7 @@ $ cf bind-service <app name> <service name>
 $ cf restart
 ~~~
 
-#### Changed bound services
+#### Changing bound services
 
 To test the application with different services, you can simply stop the app, unbind a service, bind a different
 database service, and start the app:
@@ -111,3 +111,10 @@ $ cf unbind-service <app name> <service name>
 $ cf bind-service <app name> <service name>
 $ cf restart
 ~~~
+
+#### Database drivers
+
+Database drivers for MySQL, Postgres, MongoDB, and Redis are included in the project. To connect to an Oracle database,
+you will need to download the appropriate driver (e.g. from http://www.oracle.com/technetwork/database/enterprise-edition/jdbc-112010-090769.html?ssSourceSiteId=otnjp),
+add the driver .jar file to the `src/main/webapp/WEB-INF/lib` directory in the project, and re-build the
+application .war file using `./gradlew assemble`.
