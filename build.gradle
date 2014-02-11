@@ -31,12 +31,13 @@ jar {
 buildscript {
     repositories {
         jcenter()
+        mavenLocal()
         mavenCentral()
     }
 
     dependencies {
         classpath 'org.gradle.api.plugins:gradle-tomcat-plugin:1.0'
-        classpath 'org.cloudfoundry:cf-gradle-plugin:1.0.0'
+        classpath 'org.cloudfoundry:cf-gradle-plugin:1.0.2'
     }
 }
 
@@ -116,13 +117,10 @@ cloudfoundry {
     memory = 512
     instances = 1
 
-    serviceInfos {
+    services {
         "music-mongodb" {
             label = "mongolab"
-            provider = "mongolab"
-            version = "n/a"
             plan = "sandbox"
-            bind = true
         }
     }
 }
