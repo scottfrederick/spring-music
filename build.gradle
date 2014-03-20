@@ -42,9 +42,10 @@ buildscript {
 }
 
 repositories {
-    mavenCentral()
+    maven { url "http://repo.spring.io/snapshot" }
+    maven { url "http://repo.spring.io/milestone" }
     mavenLocal()
-    maven { url "http://repo.springsource.org/milestone" }
+    mavenCentral()
 }
 
 dependencies {
@@ -54,8 +55,9 @@ dependencies {
     compile 'org.codehaus.jackson:jackson-mapper-asl:1.9.8'
 
     // Spring Cloud
-    compile 'org.springframework.cloud:spring-service-connector:0.9.4'
-    compile 'org.springframework.cloud:cloudfoundry-connector:0.9.4'
+    compile "org.springframework.cloud:spring-service-connector:${springCloudVersion}"
+    compile "org.springframework.cloud:cloudfoundry-connector:${springCloudVersion}"
+    compile "org.springframework.cloud:cloudfoundry-ups-connector:${springCloudVersion}"
 
     // Spring Data
     compile 'org.springframework.data:spring-data-jpa:1.4.3.RELEASE'
