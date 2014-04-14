@@ -8,7 +8,13 @@ apply plugin: 'war'
 
 apply plugin: 'cloudfoundry'
 
-version = '1.0'
+allprojects {
+    if (project.hasProperty('buildversion')) {
+        project.version = project.buildversion
+    } else {
+        project.version = '1.0'
+    }
+}
 
 sourceSets {
     main {
@@ -103,7 +109,10 @@ task wrapper(type: Wrapper) {
 
 war {
     // omit the version from the war file name
-    version = ""
+    // version = ""
+    manifest {
+        attributes 'Implementation-Title': 'Spring Sample Application', 'Implementation-Version': version
+    }
 }
 
 tomcatRun {
@@ -126,4 +135,3 @@ cloudfoundry {
         }
     }
 }
-
