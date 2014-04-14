@@ -109,9 +109,10 @@ task wrapper(type: Wrapper) {
 
 war {
     // omit the version from the war file name
-    // version = ""
+    ext.warversion = version
+    version = ""
     manifest {
-        attributes 'Implementation-Title': 'Spring Sample Application', 'Implementation-Version': version
+        attributes 'Implementation-Title': 'Spring Sample Application', 'Implementation-Version': ext.warversion
     }
 }
 
