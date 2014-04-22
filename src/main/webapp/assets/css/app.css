@@ -2,7 +2,13 @@
     padding-top: 10px;
 }
 
-.navbar-inner {
+.navbar {
+    background-color: white;
+    border: 0;
+    margin-bottom: 20px;
+}
+
+.navbar .container {
     background-color: #008a00;
     background-image: -moz-linear-gradient(top, #008a00, #006b00);
     background-image: -ms-linear-gradient(top, #008a00, #006b00);
@@ -12,12 +18,18 @@
     background-image: linear-gradient(top, #008a00, #006b00);
 }
 
-.navbar .brand {
-    color: #ffffff;
+.navbar .navbar-brand {
+    color: white;
 }
 
-/* fix Bootstrap thumbnail padding when using row-fluid */
-.row-fluid ul.thumbnails li.span12 + li { margin-left : 0px; }
-.row-fluid ul.thumbnails li.span6:nth-child(2n + 3) { margin-left : 0px; }
-.row-fluid ul.thumbnails li.span4:nth-child(3n + 4) { margin-left : 0px; }
-.row-fluid ul.thumbnails li.span3:nth-child(4n + 5) { margin-left : 0px; }
+.navbar .navbar-brand:hover {
+    color: white;
+}
+
+.btn {
+    background-color: white;
+}
+
+.icon-white {
+    color: white;
+}

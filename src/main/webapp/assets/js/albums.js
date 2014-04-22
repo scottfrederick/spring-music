@@ -118,8 +118,10 @@ angular.module('albums').
                             '<input type="{{ipeInputType}}" name="{{ipeFieldName}}" class="{{ipeInputClass}}" ' +
                                 'ng-required ng-model="newFieldValue" ' +
                                 'ui-keyup="{enter: \'save(ipeModel, ipeFieldName)\', esc: \'disableEditor()\'}"/>' +
-                            '<button ng-click="save(ipeModel, ipeFieldName)" type="button" class="btn"><i class="icon-ok"></i></button>' +
-                            '<button ng-click="disableEditor()" type="button" class="btn"><i class="icon-remove"></i></button>' +
+                            '<div class="btn-group btn-group-xs" role="toolbar">' +
+                                '<button ng-click="save(ipeModel, ipeFieldName)" type="button" class="btn"><span class="glyphicon glyphicon-ok"></span></button>' +
+                                '<button ng-click="disableEditor()" type="button" class="btn"><span class="glyphicon glyphicon-remove"></span></button>' +
+                            '</div>' +
                         '</div>' +
                     '</span>' +
                 '</div>',

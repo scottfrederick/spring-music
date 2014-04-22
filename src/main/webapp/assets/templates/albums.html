@@ -3,26 +3,26 @@
         <h1>Albums</h1>
         <div>
             <span> [ view as: </span>
-            <a ng-click="setAlbumsView('grid')"><i class="icon-th"></i></a>
-            <a ng-click="setAlbumsView('list')"><i class="icon-th-list"></i></a>
+            <a ng-click="setAlbumsView('grid')"><span class="glyphicon glyphicon-th"></span></a>
+            <a ng-click="setAlbumsView('list')"><span class="glyphicon glyphicon-th-list"></span></a>
             <span> | sort by: </span>
             <a href="" ng-click="sortField='title'">title</a>
             <a href="" ng-click="sortField='artist'">artist</a>
             <a href="" ng-click="sortField='releaseYear'">year</a>
             <a href="" ng-click="sortField='genre'">genre</a>
             <a href="" ng-click="sortDescending=!sortDescending">
-                <i ng-class="{'icon-chevron-up': !sortDescending, 'icon-chevron-down': sortDescending}"></i>
+                <span class="glyphicon" ng-class="{'glyphicon-chevron-up' : !sortDescending, 'glyphicon-chevron-down' : sortDescending}"></span>
             </a>
             <span> | click on any field to edit </span>
             <span> ] </span>
         </div>
     </div>
 
-    <div class="row-fluid">
+    <div class="row">
         <div ng-include src="'assets/templates/status.html'"></div>
     </div>
 
-    <div class="row-fluid">
+    <div class="row multi-columns-row">
         <div ng-include src="albumsView"></div>
     </div>
 </div>

@@ -1,35 +1,37 @@
-<table class="table table-striped">
-    <thead>
-    <tr>
-        <th>Album Title</th>
-        <th>Artist</th>
-        <th>Year</th>
-        <th>Genre</th>
-        <th></th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr ng-repeat="album in albums | orderBy:sortField:sortDescending">
-        <td>
-            <in-place-edit field-name='title' input-type='text' input-class='input-large' model=album>{{album.title}}</in-place-edit>
-        </td>
-        <td>
-            <in-place-edit field-name='artist' input-type='artist' input-class='input-large' model=album>{{album.artist}}</in-place-edit>
-        </td>
-        <td>
-            <in-place-edit field-name='releaseYear' input-type='text' input-class='input-small' model=album>{{album.releaseYear}}</in-place-edit>
-        </td>
-        <td>
-            <in-place-edit field-name='genre' input-type='text' input-class='input-medium' model=album>{{album.genre}}</in-place-edit>
-        </td>
-        <td class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                <i class="icon-cog"></i>
-            </a>
-            <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-                <a ng-click="delete(album)">delete</i></a>
-            </ul>
-        </td>
-    </tr>
-    </tbody>
-</table>
+<div class="col-xs-12">
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Album Title</th>
+            <th>Artist</th>
+            <th>Year</th>
+            <th>Genre</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="album in albums | orderBy:sortField:sortDescending">
+            <td>
+                <in-place-edit field-name='title' input-type='text' input-class='input-large' model=album>{{album.title}}</in-place-edit>
+            </td>
+            <td>
+                <in-place-edit field-name='artist' input-type='artist' input-class='input-large' model=album>{{album.artist}}</in-place-edit>
+            </td>
+            <td>
+                <in-place-edit field-name='releaseYear' input-type='text' input-class='input-small' model=album>{{album.releaseYear}}</in-place-edit>
+            </td>
+            <td>
+                <in-place-edit field-name='genre' input-type='text' input-class='input-medium' model=album>{{album.genre}}</in-place-edit>
+            </td>
+            <td class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    <span class="glyphicon glyphicon-cog"></span>
+                </a>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                    <li role="presentation"><a ng-click="delete(album)">delete</a></li>
+                </ul>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>

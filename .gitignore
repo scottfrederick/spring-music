@@ -1,5 +1,6 @@
 *.iml
 *.ipr
+*.ids
 *.iws
 .idea/
 
