@@ -1,0 +1,26 @@
+<div id="errors" class="col-xs-12"  ng-controller="ErrorsController">
+    <div class="page-header">
+        <h1>Force Errors</h1>
+    </div>
+
+    <div class="row">
+        <div ng-include src="'assets/templates/status.html'"></div>
+    </div>
+
+    <div class="row">
+        <form role="form">
+            <div class="form-group">
+                <h3>Kill this instance of the application</h3>
+                <a ng-click="kill()" class="btn btn-primary btn-lg active" role="button">Kill</a>
+            </div>
+            <div class="form-group">
+                <h3>Force an exception to be thrown from the application</h3>
+                <a ng-click="throwException()" class="btn btn-primary btn-lg active" role="button">Throw Exception</a>
+            </div>
+            <div class="form-group">
+                <h3>Force a database fetch with a bad entity ID</h3>
+                <a ng-click="fetchInvalidEntity()" class="btn btn-primary btn-lg active" role="button">Fetch</a>
+            </div>
+        </form>
+    </div>
+</div>
