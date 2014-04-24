@@ -2,8 +2,7 @@ angular.module('errors', ['ngResource']).
     factory('Errors', function ($resource) {
         return $resource('errors', {}, {
             kill: { url: 'errors/kill' },
-            throw: { url: 'errors/throw' },
-            fetch: { url: 'errors/fetch' }
+            throw: { url: 'errors/throw' }
         });
     });
 
@@ -32,17 +31,6 @@ function ErrorsController($scope, Errors, Status) {
                     Status.error("An error occurred as expected: " + result.status);
                 else
                     Status.error("An unexpected error occurred: " + result.status);
-            }
-        );
-    };
-
-    $scope.fetchInvalidEntity = function() {
-        Errors.fetch({},
-            function () {
-                Status.success("Entity was fetched without error");
-            },
-            function (result) {
-                Status.error("An unexpected error occurred: " + result.status);
             }
         );
     };

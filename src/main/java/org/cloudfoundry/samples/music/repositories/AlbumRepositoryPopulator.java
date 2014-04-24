@@ -1,8 +1,8 @@
 package org.cloudfoundry.samples.music.repositories;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.cloudfoundry.samples.music.domain.Album;
-import org.codehaus.jackson.map.DeserializationConfig;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactoryUtils;
 import org.springframework.context.ApplicationContext;
@@ -11,22 +11,22 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
-import org.springframework.data.repository.init.JacksonResourceReader;
+import org.springframework.data.repository.init.Jackson2ResourceReader;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 
 @Component
 public class AlbumRepositoryPopulator implements ApplicationListener<ContextRefreshedEvent>, ApplicationContextAware {
-    private final JacksonResourceReader resourceReader;
+    private final Jackson2ResourceReader resourceReader;
     private final Resource sourceData;
 
     private ApplicationContext applicationContext;
 
     public AlbumRepositoryPopulator() {
         ObjectMapper mapper = new ObjectMapper();
-        mapper.configure(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        resourceReader = new JacksonResourceReader(mapper);
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        resourceReader = new Jackson2ResourceReader(mapper);
         sourceData = new ClassPathResource("albums.json");
     }
 
