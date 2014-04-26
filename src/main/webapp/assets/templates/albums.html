@@ -3,8 +3,8 @@
         <h1>Albums</h1>
         <div>
             <span> [ view as: </span>
-            <a ng-click="setAlbumsView('grid')"><span class="glyphicon glyphicon-th"></span></a>
-            <a ng-click="setAlbumsView('list')"><span class="glyphicon glyphicon-th-list"></span></a>
+            <a href="" ng-click="setAlbumsView('grid')"><span class="glyphicon glyphicon-th"></span></a>
+            <a href="" ng-click="setAlbumsView('list')"><span class="glyphicon glyphicon-th-list"></span></a>
             <span> | sort by: </span>
             <a href="" ng-click="sortField='title'">title</a>
             <a href="" ng-click="sortField='artist'">artist</a>
@@ -13,7 +13,8 @@
             <a href="" ng-click="sortDescending=!sortDescending">
                 <span class="glyphicon" ng-class="{'glyphicon-chevron-up' : !sortDescending, 'glyphicon-chevron-down' : sortDescending}"></span>
             </a>
-            <span> | click on any field to edit </span>
+            <span> | </span>
+            <a href="" ng-click="addAlbum()"><span class="glyphicon glyphicon-plus"></span>add an album</a>
             <span> ] </span>
         </div>
     </div>

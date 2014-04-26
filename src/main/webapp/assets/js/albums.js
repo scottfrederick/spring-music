@@ -1,4 +1,4 @@
-angular.module('albums', ['ngResource']).
+angular.module('albums', ['ngResource', 'ui.bootstrap']).
     factory('Albums', function ($resource) {
         return $resource('albums');
     }).
@@ -27,12 +27,66 @@ angular.module('albums', ['ngResource']).
         }
     });
 
-function AlbumsController($scope, Albums, Album, Status) {
+function AlbumsController($scope, $modal, Albums, Album, Status) {
     function list() {
         $scope.albums = Albums.query();
     }
 
-    $scope.delete = function (album) {
+    function clone (obj) {
+        return JSON.parse(JSON.stringify(obj));
+    }
+
+    function saveAlbum(album) {
+        Albums.save(album,
+            function () {
+                Status.success("Album saved");
+                list();
+            },
+            function (result) {
+                Status.error("Error saving album: " + result.status);
+            }
+        );
+    }
+
+    $scope.addAlbum = function () {
+        var addModal = $modal.open({
+            templateUrl: 'assets/templates/albumForm.html',
+            controller: AlbumModalController,
+            resolve: {
+                album: function () {
+                    return {};
+                },
+                action: function() {
+                    return 'add';
+                }
+            }
+        });
+
+        addModal.result.then(function (album) {
+            saveAlbum(album);
+        });
+    };
+
+    $scope.updateAlbum = function (album) {
+        var updateModal = $modal.open({
+            templateUrl: 'assets/templates/albumForm.html',
+            controller: AlbumModalController,
+            resolve: {
+                album: function() {
+                    return clone(album);
+                },
+                action: function() {
+                    return 'update';
+                }
+            }
+        });
+
+        updateModal.result.then(function (album) {
+            saveAlbum(album);
+        });
+    };
+
+    $scope.deleteAlbum = function (album) {
         Album.delete({id: album.id},
             function () {
                 Status.success("Album deleted");
@@ -56,6 +110,19 @@ function AlbumsController($scope, Albums, Album, Status) {
     };
 }
 
+function AlbumModalController($scope, $modalInstance, album, action) {
+    $scope.albumAction = action;
+    $scope.yearPattern = /^[1-2]\d{3}$/;
+    $scope.album = album;
+
+    $scope.ok = function () {
+        $modalInstance.close($scope.album);
+    };
+
+    $scope.cancel = function () {
+        $modalInstance.dismiss('cancel');
+    };
+};
 
 function AlbumEditorController($scope, Albums, Status, EditorStatus) {
     $scope.enableEditor = function (album, fieldName) {
@@ -105,6 +172,7 @@ angular.module('albums').
                 ipeFieldName: '@fieldName',
                 ipeInputType: '@inputType',
                 ipeInputClass: '@inputClass',
+                ipePattern: '@pattern',
                 ipeModel: '=model'
             },
 
@@ -116,7 +184,7 @@ angular.module('albums').
                     '<span ng-show="isEditorEnabled(ipeModel, ipeFieldName)">' +
                         '<div class="input-append">' +
                             '<input type="{{ipeInputType}}" name="{{ipeFieldName}}" class="{{ipeInputClass}}" ' +
-                                'ng-required ng-model="newFieldValue" ' +
+                                'ng-required ng-pattern="{{ipePattern}}" ng-model="newFieldValue" ' +
                                 'ui-keyup="{enter: \'save(ipeModel, ipeFieldName)\', esc: \'disableEditor()\'}"/>' +
                             '<div class="btn-group btn-group-xs" role="toolbar">' +
                                 '<button ng-click="save(ipeModel, ipeFieldName)" type="button" class="btn"><span class="glyphicon glyphicon-ok"></span></button>' +
