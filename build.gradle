@@ -85,6 +85,10 @@ dependencies {
     compile 'org.webjars:angular-ui-bootstrap:0.10.0-1'
     compile 'org.webjars:jquery:2.1.0-2'
 
+    // Jackson
+    compile "com.fasterxml.jackson.core:jackson-core:${jacksonVersion}"
+    compile "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
+
     // Logging
     compile 'org.slf4j:slf4j-api:1.7.2'
     compile 'org.slf4j:slf4j-log4j12:1.7.2'
