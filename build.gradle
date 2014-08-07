@@ -22,6 +22,9 @@ sourceSets {
     }
 }
 
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+
 jar {
     manifest {
         attributes 'Implementation-Title': 'Spring Sample Application', 'Implementation-Version': version
@@ -36,15 +39,14 @@ buildscript {
     }
 
     dependencies {
-        classpath 'org.gradle.api.plugins:gradle-tomcat-plugin:1.0'
-        classpath 'org.cloudfoundry:cf-gradle-plugin:1.0.2'
+        classpath 'org.gradle.api.plugins:gradle-tomcat-plugin:1.2.4'
+        classpath 'org.cloudfoundry:cf-gradle-plugin:1.0.3'
     }
 }
 
 repositories {
-    maven { url "http://repo.spring.io/snapshot" }
-    maven { url "http://repo.spring.io/milestone" }
     mavenLocal()
+    maven { url "http://repo.spring.io/milestone" }
     mavenCentral()
 }
 
@@ -52,7 +54,6 @@ dependencies {
     // Spring and dependencies
     compile "org.springframework:spring-context:${springVersion}"
     compile "org.springframework:spring-webmvc:${springVersion}"
-    compile 'org.codehaus.jackson:jackson-mapper-asl:1.9.8'
 
     // Spring Cloud
     compile "org.springframework.cloud:spring-cloud-spring-service-connector:${springCloudVersion}"
@@ -103,8 +104,8 @@ dependencies {
     testCompile "org.springframework:spring-test:${springVersion}"
 
     // Tomcat
-    tomcat "org.apache.tomcat.embed:tomcat-embed-core:${tomcatVersion}",
-           "org.apache.tomcat.embed:tomcat-embed-logging-juli:${tomcatVersion}"
+    tomcat "org.apache.tomcat.embed:tomcat-embed-core:${tomcatVersion}"
+    tomcat "org.apache.tomcat.embed:tomcat-embed-logging-juli:${tomcatVersion}"
     tomcat("org.apache.tomcat.embed:tomcat-embed-jasper:${tomcatVersion}") {
         exclude group: 'org.eclipse.jdt.core.compiler', module: 'ecj'
     }
@@ -139,4 +140,3 @@ cloudfoundry {
         }
     }
 }
-
