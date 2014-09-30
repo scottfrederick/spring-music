@@ -39,7 +39,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'org.gradle.api.plugins:gradle-tomcat-plugin:1.2.4'
+        classpath 'org.gradle.api.plugins:gradle-tomcat-plugin:1.2.5'
         classpath 'org.cloudfoundry:cf-gradle-plugin:1.0.3'
     }
 }
