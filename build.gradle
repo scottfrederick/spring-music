@@ -24,6 +24,7 @@ sourceSets {
 
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
+archivesBaseName = "spring-music"
 
 jar {
     manifest {
