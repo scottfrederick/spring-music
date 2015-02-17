@@ -41,12 +41,13 @@ buildscript {
 
     dependencies {
         classpath 'org.gradle.api.plugins:gradle-tomcat-plugin:1.2.5'
-        classpath 'org.cloudfoundry:cf-gradle-plugin:1.0.3'
+        classpath 'org.cloudfoundry:cf-gradle-plugin:1.1.1'
     }
 }
 
 repositories {
     mavenLocal()
+    maven { url "http://repo.spring.io/release" }
     maven { url "http://repo.spring.io/milestone" }
     mavenCentral()
 }
@@ -62,7 +63,7 @@ dependencies {
 
     // Spring Data
     compile 'org.springframework.data:spring-data-jpa:1.5.2.RELEASE'
-    compile 'org.springframework.data:spring-data-redis:1.2.1.RELEASE'
+    compile 'org.springframework.data:spring-data-redis:1.4.2.RELEASE'
     compile 'org.springframework.data:spring-data-mongodb:1.4.2.RELEASE'
 
     // JPA Persistence
@@ -73,7 +74,7 @@ dependencies {
     runtime 'postgresql:postgresql:9.1-901-1.jdbc4'
 
     // Redis Persistence
-    runtime 'redis.clients:jedis:2.4.2'
+    compile 'redis.clients:jedis:2.6.2'
 
     // JSR-303 validation
     compile 'javax.validation:validation-api:1.0.0.GA'
@@ -87,6 +88,8 @@ dependencies {
     compile 'org.webjars:jquery:2.1.0-2'
 
     // Jackson
+    compile 'org.codehaus.jackson:jackson-core-asl:1.9.13'
+    compile 'org.codehaus.jackson:jackson-mapper-asl:1.9.13'
     compile "com.fasterxml.jackson.core:jackson-core:${jacksonVersion}"
     compile "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
 
