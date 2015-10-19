@@ -1,3 +1,18 @@
+buildscript {
+    repositories {
+        jcenter()
+        mavenCentral()
+        maven { url "https://repo.spring.io/plugins-release" }
+    }
+
+    dependencies {
+        classpath 'org.gradle.api.plugins:gradle-tomcat-plugin:1.2.5'
+        classpath 'org.cloudfoundry:cf-gradle-plugin:1.1.3'
+        classpath("io.spring.gradle:dependency-management-plugin:0.5.3.RELEASE")
+        classpath("org.springframework.build.gradle:propdeps-plugin:0.0.7")
+    }
+}
+
 apply plugin: 'java'
 
 apply plugin: 'eclipse-wtp'
@@ -7,6 +22,10 @@ apply plugin: 'tomcat'
 apply plugin: 'war'
 
 apply plugin: 'cloudfoundry'
+
+apply plugin: 'io.spring.dependency-management'
+apply plugin: 'propdeps'
+apply plugin: "propdeps-idea"
 
 version = '1.0'
 
@@ -32,80 +51,70 @@ jar {
     }
 }
 
-buildscript {
-    repositories {
-        jcenter()
-        mavenLocal()
-        mavenCentral()
-    }
-
-    dependencies {
-        classpath 'org.gradle.api.plugins:gradle-tomcat-plugin:1.2.5'
-        classpath 'org.cloudfoundry:cf-gradle-plugin:1.1.1'
-    }
+repositories {
+    mavenCentral()
 }
 
-repositories {
-    mavenLocal()
-    maven { url "http://repo.spring.io/release" }
-    maven { url "http://repo.spring.io/milestone" }
-    mavenCentral()
+dependencyManagement {
+    imports {
+        mavenBom 'io.spring.platform:platform-bom:1.1.3.RELEASE'
+    }
 }
 
 dependencies {
     // Spring and dependencies
-    compile "org.springframework:spring-context:${springVersion}"
-    compile "org.springframework:spring-webmvc:${springVersion}"
+    compile "org.springframework:spring-context"
+    compile "org.springframework:spring-webmvc"
 
     // Spring Cloud
-    compile "org.springframework.cloud:spring-cloud-spring-service-connector:${springCloudVersion}"
-    compile "org.springframework.cloud:spring-cloud-cloudfoundry-connector:${springCloudVersion}"
+    compile "org.springframework.cloud:spring-cloud-spring-service-connector"
+    compile "org.springframework.cloud:spring-cloud-cloudfoundry-connector"
 
     // Spring Data
-    compile 'org.springframework.data:spring-data-jpa:1.5.2.RELEASE'
-    compile 'org.springframework.data:spring-data-redis:1.4.2.RELEASE'
-    compile 'org.springframework.data:spring-data-mongodb:1.4.2.RELEASE'
+    compile "org.springframework.data:spring-data-jpa"
+    compile "org.springframework.data:spring-data-redis"
+    compile "org.springframework.data:spring-data-mongodb"
 
     // JPA Persistence
-    compile "commons-dbcp:commons-dbcp:1.2.2"
-    compile 'org.hibernate:hibernate-entitymanager:4.1.9.Final'
-    runtime 'com.h2database:h2:1.3.162'
-    runtime 'mysql:mysql-connector-java:5.1.25'
-    runtime 'postgresql:postgresql:9.1-901-1.jdbc4'
+    compile "commons-dbcp:commons-dbcp"
+    compile "org.hibernate:hibernate-entitymanager"
+    runtime "com.h2database:h2"
+    runtime "mysql:mysql-connector-java"
+    runtime "postgresql:postgresql:9.1-901-1.jdbc4"
 
     // Redis Persistence
-    compile 'redis.clients:jedis:2.6.2'
+    compile "redis.clients:jedis"
 
     // JSR-303 validation
-    compile 'javax.validation:validation-api:1.0.0.GA'
-    compile 'org.hibernate:hibernate-validator:4.3.0.Final'
+    compile "javax.validation:validation-api"
+    compile "org.hibernate:hibernate-validator"
 
     // Webjars
-    compile 'org.webjars:bootstrap:3.1.1'
-    compile 'org.webjars:angularjs:1.2.16'
-    compile 'org.webjars:angular-ui:0.4.0-2'
-    compile 'org.webjars:angular-ui-bootstrap:0.10.0-1'
-    compile 'org.webjars:jquery:2.1.0-2'
+    compile "org.webjars:bootstrap:3.1.1"
+    compile "org.webjars:angularjs:1.2.16"
+    compile "org.webjars:angular-ui:0.4.0-2"
+    compile "org.webjars:angular-ui-bootstrap:0.10.0-1"
+    compile "org.webjars:jquery:2.1.0-2"
 
     // Jackson
-    compile 'org.codehaus.jackson:jackson-core-asl:1.9.13'
-    compile 'org.codehaus.jackson:jackson-mapper-asl:1.9.13'
-    compile "com.fasterxml.jackson.core:jackson-core:${jacksonVersion}"
-    compile "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
+    compile "org.codehaus.jackson:jackson-core-asl:1.9.13"
+    compile "org.codehaus.jackson:jackson-mapper-asl:1.9.13"
+    compile "com.fasterxml.jackson.core:jackson-core"
+    compile "com.fasterxml.jackson.core:jackson-databind"
 
     // Logging
-    compile 'org.slf4j:slf4j-api:1.7.2'
-    compile 'org.slf4j:slf4j-log4j12:1.7.2'
+    compile "org.slf4j:slf4j-api"
+    compile "org.slf4j:slf4j-log4j12"
 
     // Servlet
     compile "javax.servlet:jstl:1.2"
-    providedCompile 'javax.servlet:javax.servlet-api:3.0.1'
+    providedCompile 'javax.servlet:javax.servlet-api'
 
     // Testing
-    testCompile 'junit:junit:4.8.2'
+    testCompile "junit:junit"
 
     // Spring Testing
-    testCompile "org.springframework:spring-test:${springVersion}"
+    testCompile "org.springframework:spring-test"
 
     // Tomcat
     tomcat "org.apache.tomcat.embed:tomcat-embed-core:${tomcatVersion}"
@@ -116,7 +125,7 @@ dependencies {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '1.9'
+    gradleVersion = '2.3'
 }
 
 war {
