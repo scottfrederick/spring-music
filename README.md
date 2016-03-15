@@ -1,12 +1,11 @@
 Spring Music
 ============
 
-This is a sample application for using database services on [Cloud Foundry](http://cloudfoundry.com)
-with the [Spring Framework](http://www.springframework.org).
+This is a sample application for using database services on [Cloud Foundry](http://cloudfoundry.org) with the [Spring Framework](http://spring.io).
 
 This application has been built to store the same domain objects in one of a variety of different persistence technologies - relational, document, and key-value stores. This is not meant to represent a realistic use case for these technologies, since you would typically choose the one most applicable to the type of data you need to store, but it is useful for testing and experimenting with different types of services on Cloud Foundry. 
 
-The application use Spring Java configuration and [bean profiles](http://static.springsource.org/spring/docs/current/spring-framework-reference/html/new-in-3.1.html#new-in-3.1-bean-definition-profiles) to configure the application and the connection objects needed to use the persistence stores. It also uses the [Spring Cloud](https://github.com/spring-projects/spring-cloud) library to inspect the environment when running on Cloud Foundry. See the [Cloud Foundry documentation](http://docs.cloudfoundry.com/docs/using/services/spring-service-bindings.html) for details on configuring a Spring application for Cloud Foundry.
+The application use Spring Java configuration and [bean profiles](https://spring.io/blog/2011/02/14/spring-3-1-m1-introducing-profile/) to configure the application and the connection objects needed to use the persistence stores. It also uses the [Spring Cloud Connectors](http://cloud.spring.io/spring-cloud-connectors/) library to inspect the environment when running on Cloud Foundry. See the [Cloud Foundry documentation](http://docs.cloudfoundry.org/buildpacks/java/spring-service-bindings.html) for details on configuring a Spring application for Cloud Foundry.
 
 ## Running the application locally
 
@@ -43,23 +42,15 @@ If no bound services are found containing any of these values in the name, then 
 If more than one service containing any of these values is bound to the application, the application will throw an
 exception and fail to start.
 
-After installing the 'cf' [command-line interface for Cloud Foundry](http://docs.cloudfoundry.com/docs/using/managing-apps/cf/),
-targeting a Cloud Foundry instance, and logging in, the application can be built and pushed using these commands:
+After installing the 'cf' [command-line interface for Cloud Foundry](http://docs.cloudfoundry.org/cf-cli/), targeting a Cloud Foundry instance, and logging in, the application can be built and pushed using these commands:
 
 ~~~
 $ ./gradlew assemble
 
 $ cf push
-...
-requested state: started
-instances: 1/1
-usage: 512M x 1 instances
-urls: spring-music--sf.cfapps.io
-...
 ~~~
 
-The application will be pushed using settings in the provided `manifest.yml` file. The output from the command will
-show the URL that has been assigned to the application.
+The application will be pushed using settings in the provided `manifest.yml` file. The output from the command will show the URL that has been assigned to the application.
 
 ### Creating and binding services
 
