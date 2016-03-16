@@ -9,15 +9,15 @@ angular.module('albums', ['ngResource', 'ui.bootstrap']).
         var editorEnabled = {};
 
         var enable = function (id, fieldName) {
-            this.editorEnabled = { 'id': id, 'fieldName': fieldName };
+            editorEnabled = { 'id': id, 'fieldName': fieldName };
         };
 
         var disable = function () {
-            this.editorEnabled = {};
+            editorEnabled = {};
         };
 
         var isEnabled = function(id, fieldName) {
-            return (this.editorEnabled['id'] == id && this.editorEnabled['fieldName'] == fieldName);
+            return (editorEnabled['id'] == id && editorEnabled['fieldName'] == fieldName);
         };
 
         return {
@@ -50,7 +50,7 @@ function AlbumsController($scope, $modal, Albums, Album, Status) {
 
     $scope.addAlbum = function () {
         var addModal = $modal.open({
-            templateUrl: 'assets/templates/albumForm.html',
+            templateUrl: 'templates/albumForm.html',
             controller: AlbumModalController,
             resolve: {
                 album: function () {
@@ -69,7 +69,7 @@ function AlbumsController($scope, $modal, Albums, Album, Status) {
 
     $scope.updateAlbum = function (album) {
         var updateModal = $modal.open({
-            templateUrl: 'assets/templates/albumForm.html',
+            templateUrl: 'templates/albumForm.html',
             controller: AlbumModalController,
             resolve: {
                 album: function() {
@@ -99,7 +99,7 @@ function AlbumsController($scope, $modal, Albums, Album, Status) {
     };
 
     $scope.setAlbumsView = function (viewName) {
-        $scope.albumsView = "assets/templates/" + viewName + ".html";
+        $scope.albumsView = "templates/" + viewName + ".html";
     };
 
     $scope.init = function() {

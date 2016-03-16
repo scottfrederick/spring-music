@@ -11,6 +11,7 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.init.Jackson2ResourceReader;
 import org.springframework.stereotype.Component;
 
@@ -38,8 +39,8 @@ public class AlbumRepositoryPopulator implements ApplicationListener<ContextRefr
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
         if (event.getApplicationContext().equals(applicationContext)) {
-            AlbumRepository albumRepository =
-                    BeanFactoryUtils.beanOfTypeIncludingAncestors(applicationContext, AlbumRepository.class);
+            CrudRepository albumRepository =
+                    BeanFactoryUtils.beanOfTypeIncludingAncestors(applicationContext, CrudRepository.class);
 
             if (albumRepository != null && albumRepository.count() == 0) {
                 populate(albumRepository);
@@ -49,7 +50,7 @@ public class AlbumRepositoryPopulator implements ApplicationListener<ContextRefr
     }
 
     @SuppressWarnings("unchecked")
-    public void populate(AlbumRepository repository) {
+    public void populate(CrudRepository repository) {
         Object entity = getEntityFromResource(sourceData);
 
         if (entity instanceof Collection) {
@@ -59,7 +60,7 @@ public class AlbumRepositoryPopulator implements ApplicationListener<ContextRefr
                 }
             }
         } else {
-            repository.save((Album) entity);
+            repository.save(entity);
         }
     }
 

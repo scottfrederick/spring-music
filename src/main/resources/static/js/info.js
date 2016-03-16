@@ -1,6 +1,6 @@
 angular.module('info', ['ngResource']).
     factory('Info', function ($resource) {
-        return $resource('info');
+        return $resource('appinfo');
     });
 
 function InfoController($scope, Info) {

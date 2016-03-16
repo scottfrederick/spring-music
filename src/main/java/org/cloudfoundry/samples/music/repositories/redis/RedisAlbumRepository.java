@@ -2,15 +2,15 @@ package org.cloudfoundry.samples.music.repositories.redis;
 
 import org.cloudfoundry.samples.music.domain.Album;
 import org.cloudfoundry.samples.music.domain.RandomIdGenerator;
-import org.cloudfoundry.samples.music.repositories.AlbumRepository;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.repository.CrudRepository;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-public class RedisAlbumRepository implements AlbumRepository {
+public class RedisAlbumRepository implements CrudRepository<Album, String> {
     public static final String ALBUMS_KEY = "albums";
 
     private final RandomIdGenerator idGenerator;
@@ -34,7 +34,7 @@ public class RedisAlbumRepository implements AlbumRepository {
 
     @Override
     public <S extends Album> Iterable<S> save(Iterable<S> albums) {
-        List<S> result = new ArrayList<S>();
+        List<S> result = new ArrayList<>();
 
         for (S entity : albums) {
             save(entity);
@@ -95,7 +95,7 @@ public class RedisAlbumRepository implements AlbumRepository {
     }
 
     private <T> List<T> convertIterableToList(Iterable<T> iterable) {
-        List<T> list = new ArrayList<T>();
+        List<T> list = new ArrayList<>();
         for (T object : iterable) {
             list.add(object);
         }

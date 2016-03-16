@@ -4,11 +4,11 @@ angular.module('SpringMusic', ['albums', 'errors', 'status', 'info', 'ngRoute', 
 
         $routeProvider.when('/errors', {
             controller: 'ErrorsController',
-            templateUrl: 'assets/templates/errors.html'
+            templateUrl: 'templates/errors.html'
         });
         $routeProvider.otherwise({
             controller: 'AlbumsController',
-            templateUrl: 'assets/templates/albums.html'
+            templateUrl: 'templates/albums.html'
         });
     }
 );
