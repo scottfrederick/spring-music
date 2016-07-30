@@ -2,6 +2,7 @@
 applications:
 - name: spring-music
   memory: 1G
-  random-route: true
+  host: springmusic
+  domain: cfapps.io
   path: build/libs/spring-music.jar
 
