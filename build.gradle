@@ -45,6 +45,7 @@ dependencies {
     compile "org.springframework.cloud:spring-cloud-core:${springCloudConnectorsVersion}"
     compile "org.springframework.cloud:spring-cloud-spring-service-connector:${springCloudConnectorsVersion}"
     compile "org.springframework.cloud:spring-cloud-cloudfoundry-connector:${springCloudConnectorsVersion}"
+    compile "org.springframework.cloud:spring-cloud-heroku-connector:${springCloudConnectorsVersion}"
 
     // JPA Persistence
     compile "commons-dbcp:commons-dbcp"
