@@ -51,6 +51,7 @@ dependencies {
     runtime "com.h2database:h2"
     runtime "mysql:mysql-connector-java"
     runtime "postgresql:postgresql:9.1-901-1.jdbc4"
+    compile "com.microsoft.sqlserver:mssql-jdbc:6.1.0.jre8"
 
     // Redis Persistence
     compile "redis.clients:jedis"
