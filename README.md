@@ -14,7 +14,7 @@ One Spring bean profile should be activated to choose the database provider that
 The application can be started locally using the following command:
 
 ~~~
-$ ./gradlew assemble
+$ ./gradlew clean assemble
 $ java -jar -Dspring.profiles.active=<profile> build/libs/spring-music.jar
 ~~~
 
@@ -41,7 +41,7 @@ If more than one service containing any of these values is bound to the applicat
 After installing the 'cf' [command-line interface for Cloud Foundry](http://docs.cloudfoundry.org/cf-cli/), targeting a Cloud Foundry instance, and logging in, the application can be built and pushed using these commands:
 
 ~~~
-$ ./gradlew assemble
+$ ./gradlew clean assemble
 $ cf push
 ~~~
 
@@ -95,4 +95,4 @@ $ cf restart
 
 #### Database drivers
 
-Database drivers for MySQL, Postgres, Microsoft SQL Server, MongoDB, and Redis are included in the project. To connect to an Oracle database, you will need to download the appropriate driver (e.g. from http://www.oracle.com/technetwork/database/enterprise-edition/jdbc-112010-090769.html?ssSourceSiteId=otnjp), add the driver .jar file to the `src/main/webapp/WEB-INF/lib` directory in the project, and re-build the application .war file using `./gradlew assemble`.
+Database drivers for MySQL, Postgres, Microsoft SQL Server, MongoDB, and Redis are included in the project. To connect to an Oracle database, you will need to download the appropriate driver (e.g. from http://www.oracle.com/technetwork/database/enterprise-edition/jdbc-112010-090769.html?ssSourceSiteId=otnjp), add the driver .jar file to the `src/main/webapp/WEB-INF/lib` directory in the project, and re-build the application .jar file.
