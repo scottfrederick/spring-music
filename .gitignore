@@ -18,3 +18,4 @@ target/
 build/
 
 *.log*
+/classes/
