@@ -14,7 +14,7 @@ One Spring bean profile should be activated to choose the database provider that
 The application can be started locally using the following command:
 
 ~~~
-$ ./gradlew tomcatRun -Dspring.profiles.active=<profile>
+$ ./gradlew bootRun -Dspring.profiles.active=<profile>
 ~~~
 
 where `<profile>` is one of the following values:
