@@ -58,6 +58,10 @@ dependencies {
     compile "org.webjars:angular-ui-bootstrap:0.10.0-1"
     compile "org.webjars:jquery:2.1.0-2"
 
+    // Oracle - uncomment one of the following after placing driver in ./libs
+    // compile files('libs/ojdbc8.jar')
+    // compile files('libs/ojdbc7.jar')
+
     // Testing
     testCompile "junit:junit"
 }
