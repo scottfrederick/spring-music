@@ -1,13 +1,14 @@
 buildscript {
     ext {
-        springBootVersion = '1.5.4.RELEASE'
-        springCloudConnectorsVersion = '1.2.4.RELEASE'
+        springBootVersion = '2.0.0.BUILD-SNAPSHOT'
+        springCloudConnectorsVersion = '2.0.0.BUILD-SNAPSHOT'
     }
 
     repositories {
         jcenter()
         mavenCentral()
         maven { url "https://repo.spring.io/plugins-release" }
+        maven { url "https://repo.spring.io/plugins-snapshot" }
     }
 
     dependencies {
@@ -21,6 +22,7 @@ apply plugin: 'eclipse-wtp'
 apply plugin: 'idea'
 
 apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
 
 version = '1.0'
 
@@ -29,6 +31,8 @@ targetCompatibility = 1.8
 
 repositories {
     mavenCentral()
+    mavenLocal()
+    maven { url "https://repo.spring.io/libs-snapshot" }
 }
 
 dependencies {
@@ -45,7 +49,7 @@ dependencies {
     compile "org.springframework.cloud:spring-cloud-cloudfoundry-connector:${springCloudConnectorsVersion}"
 
     // JPA Persistence
-    compile "commons-dbcp:commons-dbcp"
+    compile "org.apache.commons:commons-dbcp2"
     runtime "com.h2database:h2"
     runtime "mysql:mysql-connector-java"
     runtime "org.postgresql:postgresql"

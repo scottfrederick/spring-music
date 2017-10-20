@@ -3,26 +3,19 @@ package org.cloudfoundry.samples.music.repositories;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.cloudfoundry.samples.music.domain.Album;
-import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactoryUtils;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
-import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.init.Jackson2ResourceReader;
-import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 
-@Component
-public class AlbumRepositoryPopulator implements ApplicationListener<ContextRefreshedEvent>, ApplicationContextAware {
+public class AlbumRepositoryPopulator implements ApplicationListener<ApplicationReadyEvent> {
     private final Jackson2ResourceReader resourceReader;
     private final Resource sourceData;
-
-    private ApplicationContext applicationContext;
 
     public AlbumRepositoryPopulator() {
         ObjectMapper mapper = new ObjectMapper();
@@ -32,25 +25,17 @@ public class AlbumRepositoryPopulator implements ApplicationListener<ContextRefr
     }
 
     @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        this.applicationContext = applicationContext;
-    }
+    public void onApplicationEvent(ApplicationReadyEvent event) {
+        CrudRepository albumRepository =
+                BeanFactoryUtils.beanOfTypeIncludingAncestors(event.getApplicationContext(), CrudRepository.class);
 
-    @Override
-    public void onApplicationEvent(ContextRefreshedEvent event) {
-        if (event.getApplicationContext().equals(applicationContext)) {
-            CrudRepository albumRepository =
-                    BeanFactoryUtils.beanOfTypeIncludingAncestors(applicationContext, CrudRepository.class);
-
-            if (albumRepository != null && albumRepository.count() == 0) {
-                populate(albumRepository);
-            }
+        if (albumRepository != null && albumRepository.count() == 0) {
+            populate(albumRepository);
         }
-
     }
 
     @SuppressWarnings("unchecked")
-    public void populate(CrudRepository repository) {
+    private void populate(CrudRepository repository) {
         Object entity = getEntityFromResource(sourceData);
 
         if (entity instanceof Collection) {

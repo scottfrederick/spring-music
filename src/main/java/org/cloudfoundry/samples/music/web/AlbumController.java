@@ -40,12 +40,12 @@ public class AlbumController {
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public Album getById(@PathVariable String id) {
         logger.info("Getting album " + id);
-        return repository.findOne(id);
+        return repository.findById(id).orElse(null);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public void deleteById(@PathVariable String id) {
         logger.info("Deleting album " + id);
-        repository.delete(id);
+        repository.deleteById(id);
     }
 }

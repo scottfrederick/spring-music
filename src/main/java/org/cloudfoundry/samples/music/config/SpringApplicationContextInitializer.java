@@ -17,6 +17,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.util.StringUtils;
 
+import javax.validation.constraints.NotNull;
 import java.util.*;
 
 public class SpringApplicationContextInitializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
@@ -26,7 +27,7 @@ public class SpringApplicationContextInitializer implements ApplicationContextIn
     private static final Map<Class<? extends ServiceInfo>, String> serviceTypeToProfileName = new HashMap<>();
     private static final List<String> validLocalProfiles = Arrays.asList("mysql", "postgres", "mongodb", "redis");
 
-    public static final String IN_MEMORY_PROFILE = "in-memory";
+    private static final String IN_MEMORY_PROFILE = "in-memory";
 
     static {
         serviceTypeToProfileName.put(MongoServiceInfo.class, "mongodb");
@@ -56,7 +57,7 @@ public class SpringApplicationContextInitializer implements ApplicationContextIn
         }
     }
 
-    public String[] getCloudProfile(Cloud cloud) {
+    private String[] getCloudProfile(Cloud cloud) {
         if (cloud == null) {
             return null;
         }

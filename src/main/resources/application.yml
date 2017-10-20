@@ -1,10 +1,9 @@
-
----
 spring:
   jpa:
     generate-ddl: true
 
-# turn off the security on the actuator end points as this is a demo app
 management:
-  security:
-    enabled: false
+  endpoints:
+    web:
+      exposure:
+        include: "*"

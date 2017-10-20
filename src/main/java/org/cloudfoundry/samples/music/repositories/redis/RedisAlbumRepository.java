@@ -8,6 +8,7 @@ import org.springframework.data.repository.CrudRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 public class RedisAlbumRepository implements CrudRepository<Album, String> {
@@ -33,7 +34,7 @@ public class RedisAlbumRepository implements CrudRepository<Album, String> {
     }
 
     @Override
-    public <S extends Album> Iterable<S> save(Iterable<S> albums) {
+    public <S extends Album> Iterable<S> saveAll(Iterable<S> albums) {
         List<S> result = new ArrayList<>();
 
         for (S entity : albums) {
@@ -45,12 +46,12 @@ public class RedisAlbumRepository implements CrudRepository<Album, String> {
     }
 
     @Override
-    public Album findOne(String id) {
-        return hashOps.get(ALBUMS_KEY, id);
+    public Optional<Album> findById(String id) {
+        return Optional.of(hashOps.get(ALBUMS_KEY, id));
     }
 
     @Override
-    public boolean exists(String id) {
+    public boolean existsById(String id) {
         return hashOps.hasKey(ALBUMS_KEY, id);
     }
 
@@ -60,7 +61,7 @@ public class RedisAlbumRepository implements CrudRepository<Album, String> {
     }
 
     @Override
-    public Iterable<Album> findAll(Iterable<String> ids) {
+    public Iterable<Album> findAllById(Iterable<String> ids) {
         return hashOps.multiGet(ALBUMS_KEY, convertIterableToList(ids));
     }
 
@@ -70,7 +71,7 @@ public class RedisAlbumRepository implements CrudRepository<Album, String> {
     }
 
     @Override
-    public void delete(String id) {
+    public void deleteById(String id) {
         hashOps.delete(ALBUMS_KEY, id);
     }
 
@@ -80,7 +81,7 @@ public class RedisAlbumRepository implements CrudRepository<Album, String> {
     }
 
     @Override
-    public void delete(Iterable<? extends Album> albums) {
+    public void deleteAll(Iterable<? extends Album> albums) {
         for (Album album : albums) {
             delete(album);
         }
@@ -90,7 +91,7 @@ public class RedisAlbumRepository implements CrudRepository<Album, String> {
     public void deleteAll() {
         Set<String> ids = hashOps.keys(ALBUMS_KEY);
         for (String id : ids) {
-            delete(id);
+            deleteById(id);
         }
     }
 
