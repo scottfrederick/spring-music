@@ -44,7 +44,6 @@ dependencies {
     compile "org.springframework.boot:spring-boot-starter-data-redis"
 
     // Spring Cloud Connectors
-    compile "org.springframework.cloud:spring-cloud-core:${springCloudConnectorsVersion}"
     compile "org.springframework.cloud:spring-cloud-spring-service-connector:${springCloudConnectorsVersion}"
     compile "org.springframework.cloud:spring-cloud-cloudfoundry-connector:${springCloudConnectorsVersion}"
 
