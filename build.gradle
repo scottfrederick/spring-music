@@ -1,14 +1,13 @@
 buildscript {
     ext {
-        springBootVersion = '2.0.0.BUILD-SNAPSHOT'
-        springCloudConnectorsVersion = '2.0.0.BUILD-SNAPSHOT'
+        springBootVersion = '2.0.0.RELEASE'
+        springCloudConnectorsVersion = '2.0.1.RELEASE'
     }
 
     repositories {
         jcenter()
         mavenCentral()
         maven { url "https://repo.spring.io/plugins-release" }
-        maven { url "https://repo.spring.io/plugins-snapshot" }
     }
 
     dependencies {
@@ -32,7 +31,6 @@ targetCompatibility = 1.8
 repositories {
     mavenCentral()
     mavenLocal()
-    maven { url "https://repo.spring.io/libs-snapshot" }
 }
 
 dependencies {
