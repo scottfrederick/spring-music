@@ -2,6 +2,12 @@ package org.cloudfoundry.samples.music.config;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.boot.autoconfigure.data.mongo.MongoDataAutoConfiguration;
+import org.springframework.boot.autoconfigure.data.mongo.MongoRepositoriesAutoConfiguration;
+import org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration;
+import org.springframework.boot.autoconfigure.data.redis.RedisRepositoriesAutoConfiguration;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
+import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
 import org.springframework.cloud.Cloud;
 import org.springframework.cloud.CloudException;
 import org.springframework.cloud.CloudFactory;
@@ -15,10 +21,16 @@ import org.springframework.cloud.service.common.SqlServerServiceInfo;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.env.ConfigurableEnvironment;
+import org.springframework.core.env.MapPropertySource;
+import org.springframework.core.env.PropertySource;
 import org.springframework.util.StringUtils;
 
-import javax.validation.constraints.NotNull;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class SpringApplicationContextInitializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
 
@@ -55,6 +67,8 @@ public class SpringApplicationContextInitializer implements ApplicationContextIn
         for (String persistenceProfile : persistenceProfiles) {
             appEnvironment.addActiveProfile(persistenceProfile);
         }
+
+        excludeAutoConfiguration(appEnvironment);
     }
 
     private String[] getCloudProfile(Cloud cloud) {
@@ -125,5 +139,45 @@ public class SpringApplicationContextInitializer implements ApplicationContextIn
         String[] profileNames = {baseName, baseName + "-" + suffix};
         logger.info("Setting profile names: " + StringUtils.arrayToCommaDelimitedString(profileNames));
         return profileNames;
+    }
+
+    private void excludeAutoConfiguration(ConfigurableEnvironment environment) {
+        List<String> exclude = new ArrayList<>();
+        if (environment.acceptsProfiles("redis")) {
+            excludeDataSourceAutoConfiguration(exclude);
+            excludeMongoAutoConfiguration(exclude);
+        } else if (environment.acceptsProfiles("mongodb")) {
+            excludeDataSourceAutoConfiguration(exclude);
+            excludeRedisAutoConfiguration(exclude);
+        } else {
+            excludeMongoAutoConfiguration(exclude);
+            excludeRedisAutoConfiguration(exclude);
+        }
+
+        Map<String, Object> properties = Collections.singletonMap("spring.autoconfigure.exclude",
+                StringUtils.collectionToCommaDelimitedString(exclude));
+
+        PropertySource<?> propertySource = new MapPropertySource("springMusicAutoConfig", properties);
+
+        environment.getPropertySources().addFirst(propertySource);
+    }
+
+    private void excludeDataSourceAutoConfiguration(List<String> exclude) {
+        exclude.add(DataSourceAutoConfiguration.class.getName());
+    }
+
+    private void excludeMongoAutoConfiguration(List<String> exclude) {
+        exclude.addAll(Arrays.asList(
+                MongoAutoConfiguration.class.getName(),
+                MongoDataAutoConfiguration.class.getName(),
+                MongoRepositoriesAutoConfiguration.class.getName()
+        ));
+    }
+
+    private void excludeRedisAutoConfiguration(List<String> exclude) {
+        exclude.addAll(Arrays.asList(
+                RedisAutoConfiguration.class.getName(),
+                RedisRepositoriesAutoConfiguration.class.getName()
+        ));
     }
 }
