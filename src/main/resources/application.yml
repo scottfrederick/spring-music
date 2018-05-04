@@ -10,8 +10,7 @@ management:
 
 ---
 spring:
-  profiles:
-    active: mysql
+  profiles: mysql
   jpa:
     properties:
       hibernate:
