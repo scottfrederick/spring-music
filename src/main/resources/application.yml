@@ -7,3 +7,12 @@ management:
     web:
       exposure:
         include: "*"
+
+---
+spring:
+  profiles:
+    active: mysql
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL55Dialect
