@@ -29,13 +29,12 @@ $ java -jar -Dspring.profiles.active=<profile> build/libs/spring-music.jar
 
 where `<profile>` is one of the following values:
 
-* `in-memory` (no external database required)
 * `mysql`
 * `postgres`
 * `mongodb`
 * `redis`
 
-If no profile is provided, `in-memory` will be used. If any other profile is provided, the appropriate database server must be started separately. The application will use the host name `localhost` and the default port to connect to the database. The connection parameters can be configured by setting the appropriate [Spring Boot properties](http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html).
+If no profile is provided, an in-memory relational database will be used. If any other profile is provided, the appropriate database server must be started separately. Spring Boot will auto-configure a connection to the database using it's auto-configuration defaults. The connection parameters can be configured by setting the appropriate [Spring Boot properties](http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html).
 
 If more than one of these profiles is provided, the application will throw an exception and fail to start.
 
@@ -43,7 +42,7 @@ If more than one of these profiles is provided, the application will throw an ex
 
 When running on Cloud Foundry, the application will detect the type of database service bound to the application (if any). If a service of one of the supported types (MySQL, Postgres, Oracle, MongoDB, or Redis) is bound to the app, the appropriate Spring profile will be configured to use the database service. The connection strings and credentials needed to use the service will be extracted from the Cloud Foundry environment.
 
-If no bound services are found containing any of these values in the name, then the `in-memory` profile will be used.
+If no bound services are found containing any of these values in the name, an in-memory relational database will be used.
 
 If more than one service containing any of these values is bound to the application, the application will throw an exception and fail to start.
 

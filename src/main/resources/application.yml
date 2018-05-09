@@ -11,7 +11,25 @@ management:
 ---
 spring:
   profiles: mysql
+  datasource:
+    url: "jdbc:mysql://localhost/music"
+    driver-class-name: com.mysql.jdbc.Driver
+    username:
+    password: 
   jpa:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL55Dialect
+
+---
+spring:
+  profiles: postgres
+  datasource:
+    url: "jdbc:postgresql://localhost/music"
+    driver-class-name: org.postgresql.Driver
+    username: postgres
+    password: 
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.ProgressDialect

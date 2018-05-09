@@ -31,15 +31,16 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class SpringApplicationContextInitializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
 
     private static final Log logger = LogFactory.getLog(SpringApplicationContextInitializer.class);
 
     private static final Map<Class<? extends ServiceInfo>, String> serviceTypeToProfileName = new HashMap<>();
-    private static final List<String> validLocalProfiles = Arrays.asList("mysql", "postgres", "mongodb", "redis");
-
-    private static final String IN_MEMORY_PROFILE = "in-memory";
+    private static final List<String> validLocalProfiles =
+            Arrays.asList("mysql", "postgres", "sqlserver", "oracle", "mongodb", "redis");
 
     static {
         serviceTypeToProfileName.put(MongoServiceInfo.class, "mongodb");
@@ -56,24 +57,16 @@ public class SpringApplicationContextInitializer implements ApplicationContextIn
 
         ConfigurableEnvironment appEnvironment = applicationContext.getEnvironment();
 
-        String[] persistenceProfiles = getCloudProfile(cloud);
-        if (persistenceProfiles == null) {
-            persistenceProfiles = getActiveProfile(appEnvironment);
-        }
-        if (persistenceProfiles == null) {
-            persistenceProfiles = new String[] { IN_MEMORY_PROFILE };
-        }
+        validateActiveProfiles(appEnvironment);
 
-        for (String persistenceProfile : persistenceProfiles) {
-            appEnvironment.addActiveProfile(persistenceProfile);
-        }
+        addCloudProfile(cloud, appEnvironment);
 
         excludeAutoConfiguration(appEnvironment);
     }
 
-    private String[] getCloudProfile(Cloud cloud) {
+    private void addCloudProfile(Cloud cloud, ConfigurableEnvironment appEnvironment) {
         if (cloud == null) {
-            return null;
+            return;
         }
 
         List<String> profiles = new ArrayList<>();
@@ -97,10 +90,9 @@ public class SpringApplicationContextInitializer implements ApplicationContextIn
         }
 
         if (profiles.size() > 0) {
-            return createProfileNames(profiles.get(0), "cloud");
+            appEnvironment.addActiveProfile(profiles.get(0));
+            appEnvironment.addActiveProfile(profiles.get(0) + "-cloud");
         }
-
-        return null;
     }
 
     private Cloud getCloud() {
@@ -112,14 +104,10 @@ public class SpringApplicationContextInitializer implements ApplicationContextIn
         }
     }
 
-    private String[] getActiveProfile(ConfigurableEnvironment appEnvironment) {
-        List<String> serviceProfiles = new ArrayList<>();
-
-        for (String profile : appEnvironment.getActiveProfiles()) {
-            if (validLocalProfiles.contains(profile)) {
-                serviceProfiles.add(profile);
-            }
-        }
+    private void validateActiveProfiles(ConfigurableEnvironment appEnvironment) {
+        List<String> serviceProfiles = Stream.of(appEnvironment.getActiveProfiles())
+                .filter(validLocalProfiles::contains)
+                .collect(Collectors.toList());
 
         if (serviceProfiles.size() > 1) {
             throw new IllegalStateException("Only one active Spring profile may be set among the following: " +
@@ -127,18 +115,6 @@ public class SpringApplicationContextInitializer implements ApplicationContextIn
                     "These profiles are active: [" +
                     StringUtils.collectionToCommaDelimitedString(serviceProfiles) + "]");
         }
-
-        if (serviceProfiles.size() > 0) {
-            return createProfileNames(serviceProfiles.get(0), "local");
-        }
-
-        return null;
-    }
-
-    private String[] createProfileNames(String baseName, String suffix) {
-        String[] profileNames = {baseName, baseName + "-" + suffix};
-        logger.info("Setting profile names: " + StringUtils.arrayToCommaDelimitedString(profileNames));
-        return profileNames;
     }
 
     private void excludeAutoConfiguration(ConfigurableEnvironment environment) {
