@@ -46,6 +46,7 @@ dependencies {
     compile "org.springframework.cloud:spring-cloud-cloudfoundry-connector:${springCloudConnectorsVersion}"
 
     // JPA Persistence
+    runtime "org.apache.commons:commons-pool2:2.6.0"
     runtime "com.h2database:h2"
     runtime "mysql:mysql-connector-java"
     runtime "org.postgresql:postgresql"
