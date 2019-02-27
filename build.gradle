@@ -1,7 +1,7 @@
 buildscript {
     ext {
-        springBootVersion = '2.1.7.RELEASE'
-        springCloudConnectorsVersion = '2.0.6.RELEASE'
+        springBootVersion = '2.1.3.RELEASE'
+        javaCfEnvVersion = '1.0.0.BUILD-SNAPSHOT'
     }
 
     repositories {
@@ -38,9 +38,8 @@ dependencies {
     compile "org.springframework.boot:spring-boot-starter-data-mongodb"
     compile "org.springframework.boot:spring-boot-starter-data-redis"
 
-    // Spring Cloud Connectors
-    compile "org.springframework.cloud:spring-cloud-spring-service-connector:${springCloudConnectorsVersion}"
-    compile "org.springframework.cloud:spring-cloud-cloudfoundry-connector:${springCloudConnectorsVersion}"
+    // Java CfEnv
+    compile "io.pivotal.cfenv:java-cfenv-boot:${javaCfEnvVersion}"
 
     // JPA Persistence
     runtime "org.apache.commons:commons-pool2:2.6.0"
@@ -48,6 +47,9 @@ dependencies {
     runtime "mysql:mysql-connector-java"
     runtime "org.postgresql:postgresql"
     runtime "com.microsoft.sqlserver:mssql-jdbc"
+
+    // uncomment to use Lettuce instead of Jedis for Redis connections
+    // runtime "io.lettuce:lettuce-core"
 
     // Webjars
     compile "org.webjars:bootstrap:3.1.1"
