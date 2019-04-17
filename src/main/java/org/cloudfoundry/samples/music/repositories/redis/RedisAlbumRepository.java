@@ -47,7 +47,7 @@ public class RedisAlbumRepository implements CrudRepository<Album, String> {
 
     @Override
     public Optional<Album> findById(String id) {
-        return Optional.of(hashOps.get(ALBUMS_KEY, id));
+        return Optional.ofNullable(hashOps.get(ALBUMS_KEY, id));
     }
 
     @Override
