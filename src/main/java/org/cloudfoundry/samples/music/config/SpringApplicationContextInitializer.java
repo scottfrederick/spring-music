@@ -59,8 +59,11 @@ public class SpringApplicationContextInitializer implements ApplicationContextIn
         List<String> profiles = new ArrayList<>();
 
         List<CfService> services = cfEnv.findAllServices();
+        List<String> serviceNames = services.stream()
+                .map(CfService::getName)
+                .collect(Collectors.toList());
 
-        logger.info("Found services: " + StringUtils.collectionToCommaDelimitedString(services));
+        logger.info("Found services " + StringUtils.collectionToCommaDelimitedString(serviceNames));
 
         for (CfService service : services) {
             for (String profileKey : profileNameToServiceTags.keySet()) {
@@ -79,6 +82,7 @@ public class SpringApplicationContextInitializer implements ApplicationContextIn
         }
 
         if (profiles.size() > 0) {
+            logger.info("Setting service profile " + profiles.get(0));
             appEnvironment.addActiveProfile(profiles.get(0));
         }
     }
