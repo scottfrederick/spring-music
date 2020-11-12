@@ -1,7 +1,7 @@
 buildscript {
     ext {
-        springBootVersion = '2.2.4.RELEASE'
-        javaCfEnvVersion = '2.1.1.RELEASE'
+        springBootVersion = '2.4.0'
+        javaCfEnvVersion = '2.1.2.RELEASE'
     }
 
     repositories {
@@ -69,5 +69,4 @@ dependencies {
 
 jar {
     archiveBaseName = "spring-music"
-    archiveVersion = "" // omit the version from the war file name
 }
