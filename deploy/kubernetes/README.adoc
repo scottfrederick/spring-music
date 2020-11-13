@@ -1,0 +1,169 @@
+= Deploying to Kubernetes
+
+The Spring Music application can be packaged as an OCI image and run in a Kubernetes container using the instructions in this document.
+
+NOTE: All commands shown below should be run from the root of the project. 
+
+== Prerequisites
+
+* a running Kubernetes cluster (https://kind.sigs.k8s.io/#installation-and-usage[kind] or https://minikube.sigs.k8s.io/docs/start/[minikube] will work)
+* https://kubernetes.io/docs/tasks/tools/install-kubectl/[kubectl CLI] installed
+* https://skaffold.dev/docs/install/[skaffold CLI] installed
+* https://kubectl.docs.kubernetes.io/installation/kustomize/[kustomize CLI] installed
+* https://helm.sh/docs/intro/install/[helm CLI] installed
+
+== Running the application in Kubernetes
+
+The following examples use Skaffold to build and run the application.
+
+=== In-memory database
+
+The application can be run with an in-memory relational database using the following command:
+
+[source,bash]
+----
+$ skaffold run -f deploy/kubernetes/skaffold.yaml --port-forward -d $USER
+----
+
+=== External database
+
+Skaffold can install and run a database server in the Kubernetes cluster using Helm and then configure the application to use the database server.  
+These examples use Helm charts from the https://bitnami.com/[Bitnami] catalog.
+You must add the Bitnami chart repository to Helm before running the `skaffold run` commands in this section:
+
+[source,bash]
+----
+$ helm repo add bitnami https://charts.bitnami.com/bitnami
+----
+
+Once the Bitnami repository has been added, you can provide a profile argument to `skaffold run` to select a database server to install along with the application.
+
+==== MySQL
+
+Use the following command to run the application with a MySQL server:
+
+[source,bash]
+----
+$ skaffold run -f deploy/kubernetes/skaffold.yaml --port-forward -d $USER -p mysql-server,mysql
+----
+
+==== MongoDB
+ 
+Use the following command to run the application with a MongoDB server:
+
+[source,bash]
+----
+$ skaffold run -f deploy/kubernetes/skaffold.yaml --port-forward -d $USER -p mongodb-server,mongodb
+----
+ 
+==== Redis
+ 
+Use the following command to run the application with a Redis server:
+
+[source,bash]
+----
+$ skaffold run -f deploy/kubernetes/skaffold.yaml --port-forward -d $USER -p redis-server,redis
+----
+
+== Cleaning up
+
+To remove the running application and database server, run the following command:
+
+[source,bash]
+----
+$ skaffold delete -f deploy/kubernetes/skaffold.yaml
+----
+
+== How it works
+
+These deployment examples show a pure Spring Boot approach to configuring an application to connect to an external database.
+
+When the application is configured to use an external database, a Kubernetes secret is created to store the connection details.
+The secret contains a set of key/value pairs that expose https://docs.spring.io/spring-boot/docs/current/reference/html/appendix-application-properties.html#data-properties[Spring Boot auto-configuration properties] to the application.
+This example shows a secret containing MySQL connection details.
+
+[source,yaml]
+----
+apiVersion: v1
+kind: Secret
+metadata:
+  name: spring-music-db
+stringData:
+  spring.datasource.url: jdbc:mysql://music-mysql.mysql.svc.cluster.local/music
+  spring.datasource.username: root
+  spring.datasource.password: secret
+----
+
+The Kubernetes deployment mounts this secret into the application pod at the path `/workspace/db-secret`:
+
+[source,yaml]
+----
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spring-music
+spec:
+  ...
+  template:
+    ...
+    spec:
+      containers:
+      - image: spring-music
+        name: spring-music
+        ...
+        volumeMounts:
+          - name: db-secret-volume
+            mountPath: /workspace/db-secret
+            readOnly: true
+      volumes:
+        - name: db-secret-volume
+          secret:
+            secretName: spring-music-db
+----
+
+The application is configured to load properties from the mounted `/workspace/db-secret/` path using the https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#boot-features-external-config-files-configtree[Spring Boot `configtree`] property loading feature:
+
+[source,yaml]
+----
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: spring-music
+data:
+  application.yml: |
+    spring:
+      config:
+        import: configtree:/workspace/db-secret/
+----
+
+The result of loading these properties can be seen in the `/actuator/env` endpoint of the running application:
+
+[source,json]
+----
+{
+    "activeProfiles": [
+        "mysql"
+    ],
+    "propertySources": [
+        ...
+        {
+            "name": "Config tree '/workspace/db-secret'",
+            "properties": {
+                "spring.datasource.password": {
+                    "value": "******",
+                    "origin": "path [/workspace/db-secret/spring.datasource.password] - 1:1"
+                },
+                "spring.datasource.url": {
+                    "value": "jdbc:mysql://music-mysql.mysql.svc.cluster.local/music",
+                    "origin": "path [/workspace/db-secret/spring.datasource.url] - 1:1"
+                },
+                "spring.datasource.username": {
+                    "value": "root",
+                    "origin": "path [/workspace/db-secret/spring.datasource.username] - 1:1"
+                }
+            }
+        },
+        ...
+    ]
+}
+----

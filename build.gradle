@@ -7,6 +7,7 @@ buildscript {
     repositories {
         mavenCentral()
         maven { url "https://repo.spring.io/plugins-release" }
+        maven { url "https://repo.spring.io/plugins-snapshot" }
     }
 
     dependencies {
@@ -26,6 +27,7 @@ version = '1.0'
 
 repositories {
     mavenCentral()
+    maven { url "https://repo.spring.io/snapshot" }
 }
 
 dependencies {

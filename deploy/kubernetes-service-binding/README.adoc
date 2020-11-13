@@ -1,0 +1,162 @@
+= Deploying to Kubernetes
+
+The Spring Music application can be packaged as an OCI image and run in a Kubernetes container using the instructions in this document.
+
+NOTE: All commands shown below should be run from the root of the project. 
+
+== Prerequisites
+
+* a running Kubernetes cluster (https://kind.sigs.k8s.io/#installation-and-usage[kind] or https://minikube.sigs.k8s.io/docs/start/[minikube] will work)
+** a Kubernetes https://github.com/vmware-labs/service-bindings[service binding controller] installed in the cluster
+* https://kubernetes.io/docs/tasks/tools/install-kubectl/[kubectl CLI] installed
+* https://skaffold.dev/docs/install/[skaffold CLI] installed
+* https://kubectl.docs.kubernetes.io/installation/kustomize/[kustomize CLI] installed
+* https://helm.sh/docs/intro/install/[helm CLI] installed
+
+== Running the application in Kubernetes
+
+The following examples use Skaffold to build and run the application.
+
+=== In-memory database
+
+The application can be run with an in-memory relational database using the following command:
+
+[source,bash]
+----
+$ skaffold run -f deploy/kubernetes-service-binding/skaffold.yaml --port-forward -d $USER
+----
+
+=== External database
+
+Skaffold can install and run a database server in the Kubernetes cluster using Helm and then configure the application to use the database server.  
+These examples use Helm charts from the https://bitnami.com/[Bitnami] catalog.
+You must add the Bitnami chart repository to Helm before running the `skaffold run` commands in this section:
+
+[source,bash]
+----
+$ helm repo add bitnami https://charts.bitnami.com/bitnami
+----
+
+Once the Bitnami repository has been added, you can provide a profile argument to `skaffold run` to select a database server to install along with the application.
+
+==== MySQL
+
+Use the following command to run the application with a MySQL server:
+
+[source,bash]
+----
+$ skaffold run -f deploy/kubernetes-service-binding/skaffold.yaml --port-forward -d $USER -p mysql-server,mysql
+----
+
+==== MongoDB
+ 
+Use the following command to run the application with a MongoDB server:
+
+[source,bash]
+----
+$ skaffold run -f deploy/kubernetes-service-binding/skaffold.yaml --port-forward -d $USER -p mongodb-server,mongodb
+----
+ 
+==== Redis
+ 
+Use the following command to run the application with a Redis server:
+
+[source,bash]
+----
+$ skaffold run -f deploy/kubernetes-service-binding/skaffold.yaml --port-forward -d $USER -p redis-server,redis
+----
+
+== Cleaning up
+
+To remove the running application and database server, run the following command:
+
+[source,bash]
+----
+$ skaffold delete -f deploy/kubernetes-service-binding/skaffold.yaml
+$ kubectl delete all,secret -l app.kubernetes.io/name=spring-music
+----
+
+== How it works
+
+These deployment examples show the use of the https://github.com/k8s-service-bindings/spec[Kubernetes service binding specification] to configure an application to connect to an external database.
+The service binding specification is implemented by https://paketo.io/docs/buildpacks/language-family-buildpacks/java/#runtime-auto-configuration[Paketo buildpacks] and the https://github.com/spring-cloud/spring-cloud-bindings[Spring Cloud Bindings] library.
+
+When the application is configured to use an external database, a Kubernetes secret is created to store the connection details.
+The secret contains a set of key/value pairs that expose properties to the application following https://github.com/k8s-service-bindings/spec#well-known-secret-entries[service binding conventions].
+This example shows a secret containing MySQL connection details:
+
+[source,yaml]
+----
+apiVersion: v1
+kind: Secret
+metadata:
+  name: spring-music-db
+type: service.binding/mysql
+stringData:
+  type: mysql
+  host: music-mysql.mysql.svc.cluster.local
+  port: "3306"
+  database: music
+  username: root
+  password: secret
+----
+
+A service binding definition binds the secret to the application:
+
+[source,yaml]
+----
+apiVersion: service.binding/v1alpha2
+kind: ServiceBinding
+metadata:
+  name: spring-music-binding
+spec:
+  application:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: spring-music
+  service:
+    apiVersion: v1
+    kind: Secret
+    name: spring-music-db
+----
+
+At runtime, Spring Cloud Bindings https://github.com/spring-cloud/spring-cloud-bindings#mysql-rdbms[maps the connection details] to Spring Boot auto-configuration properties, as shown in the `/actuator/env` endpoint of the running application:
+
+[source,json]
+----
+{
+    "activeProfiles": [
+        "mysql"
+    ],
+    "propertySources": [
+        ...
+        {
+            "name": "kubernetesServiceBindingSpecific",
+            "properties": {
+                "spring.datasource.driver-class-name": {
+                    "value": "com.mysql.cj.jdbc.Driver"
+                },
+                "spring.datasource.username": {
+                    "value": "root"
+                },
+                "spring.datasource.url": {
+                    "value": "jdbc:mysql://music-mysql.mysql.svc.cluster.local:3306/music"
+                },
+                "spring.r2dbc.password": {
+                    "value": "******"
+                },
+                "spring.r2dbc.url": {
+                    "value": "r2dbc:mysql://music-mysql.mysql.svc.cluster.local:3306/music"
+                },
+                "spring.r2dbc.username": {
+                    "value": "root"
+                },
+                "spring.datasource.password": {
+                    "value": "******"
+                }
+            }
+        },
+        ...
+    ]
+}
+----

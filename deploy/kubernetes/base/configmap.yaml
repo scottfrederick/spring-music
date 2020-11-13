@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: spring-music
+  labels:
+    app.kubernetes.io/name: spring-music
+data:
+  application.yml: |
+    spring:
+      config:
+        import: configtree:/workspace/db-secret/
+    server:
+      shutdown: graceful

@@ -1,0 +1,25 @@
+services:
+
+  music-redis:
+    image: redis
+    restart: always
+    ports:
+      - 6379:6379
+    networks:
+      - music-redis-network
+
+  spring-music:
+    image: spring-music
+    depends_on:
+      music-redis:
+        condition: service_started
+    ports:
+      - 8080:8080
+    networks:
+      - music-redis-network
+    environment:
+      spring.profiles.active: redis
+      spring.redis.host: music-redis
+
+networks:
+  music-redis-network:

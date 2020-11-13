@@ -1,0 +1,78 @@
+apiVersion: skaffold/v2beta9
+kind: Config
+metadata:
+  name: spring-music
+build:
+  tagPolicy:
+    sha256: {}
+  artifacts:
+    - image: spring-music
+      custom:
+        buildCommand: ./gradlew bootBuildImage -x test --imageName=$IMAGE
+        dependencies:
+          paths:
+            - src
+            - build.gradle
+deploy:
+  kustomize:
+    paths:
+      - deploy/kubernetes-service-binding/base
+portForward:
+  - resourceType: service
+    resourceName: spring-music
+    port: 8080
+    localPort: 8080
+
+profiles:
+  - name: mongodb-server
+    deploy:
+      helm:
+        releases:
+          - name: music
+            chartPath: bitnami/mongodb
+            remote: true
+            namespace: mongodb
+            createNamespace: true
+            wait: true
+            setValues:
+              auth.rootPassword: secret
+  - name: mongodb
+    deploy:
+      kustomize:
+        paths:
+          - deploy/kubernetes-service-binding/overlays/mongodb
+  - name: mysql-server
+    deploy:
+      helm:
+        releases:
+          - name: music-mysql
+            chartPath: bitnami/mysql
+            remote: true
+            namespace: mysql
+            createNamespace: true
+            wait: true
+            setValues:
+              root.password: secret
+              db.name: music
+  - name: mysql
+    deploy:
+      kustomize:
+        paths:
+          - deploy/kubernetes-service-binding/overlays/mysql
+  - name: redis-server
+    deploy:
+      helm:
+        releases:
+          - name: music-redis
+            chartPath: bitnami/redis
+            remote: true
+            namespace: redis
+            createNamespace: true
+            wait: true
+            setValues:
+              password: secret
+  - name: redis
+    deploy:
+      kustomize:
+        paths:
+          - deploy/kubernetes-service-binding/overlays/redis

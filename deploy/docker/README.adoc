@@ -1,0 +1,71 @@
+= Deploying to Docker
+
+The Spring Music application can be packaged as an OCI image and run in a Docker container using the instructions in this document.
+
+NOTE: All commands shown below should be run from the root of the project. 
+
+== Prerequisites
+
+* a running Docker daemon
+* https://docs.docker.com/desktop/[docker CLI] installed
+* https://docs.docker.com/compose/[docker-compose CLI] installed
+
+== Building
+
+The https://docs.spring.io/spring-boot/docs/current/gradle-plugin/reference/htmlsingle/#build-image[Spring Boot Gradle plugin] can be used to build an OCI image using https://buildpacks.io[Cloud Native Buildpacks]:
+
+[source,bash]
+----
+$ ./gradlew bootBuildImage --imageName=spring-music
+----
+
+== Running the application in Docker
+
+=== In-memory database
+
+The application can be run stand-alone, with an in-memory relational database, using the following command:
+
+[source,bash]
+----
+$ docker run -p 8080:8080 spring-music
+----
+
+=== External database
+
+Docker Compose can be used to run the application along with a database server. 
+
+==== MySQL
+
+Use the following command to run the application with a MySQL server:
+
+[source,bash]
+----
+$ docker-compose -f deploy/docker/docker-compose-mysql.yml up
+----
+ 
+==== MongoDB
+ 
+Use the following command to run the application with a MongoDB server:
+
+[source,bash]
+----
+$ docker-compose -f deploy/docker/docker-compose-mongodb.yml up
+----
+ 
+==== Redis
+ 
+Use the following command to run the application with a Redis server:
+
+[source,bash]
+----
+$ docker-compose -f deploy/docker/docker-compose-redis.yml up
+----
+
+== Cleaning up
+
+To remove the running application and database server, run `docker-compose down` with the same filename argument as provided to `docker-compose up`:
+
+[source,bash]
+----
+$ docker-compose -f deploy/docker/docker-compose-[mysql|mongodb|redis].yml down
+----

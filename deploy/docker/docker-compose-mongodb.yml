@@ -1,0 +1,25 @@
+services:
+
+  music-mongodb:
+    image: mongo
+    restart: always
+    ports:
+      - 27017:27017
+    networks:
+      - music-mongodb-network
+
+  spring-music:
+    image: spring-music
+    depends_on:
+      music-mongodb:
+       condition: service_started
+    ports:
+      - 8080:8080
+    networks:
+      - music-mongodb-network
+    environment:
+      spring.profiles.active: mongodb
+      spring.data.mongodb.host: music-mongodb
+
+networks:
+  music-mongodb-network:
