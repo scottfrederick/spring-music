@@ -9,7 +9,7 @@ The application use Spring Java configuration and [bean profiles](http://docs.sp
 
 ## Building
 
-This project requires Java 8 to compile. It will not compile with Java 9 or later.
+This project requires Java 8 or later to compile.
 
 To build a runnable Spring Boot jar file, run the following command: 
 
