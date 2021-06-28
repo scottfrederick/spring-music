@@ -1,11 +1,10 @@
 buildscript {
     ext {
-        springBootVersion = '2.4.0'
+        springBootVersion = '2.5.2'
         javaCfEnvVersion = '2.1.2.RELEASE'
     }
 
     repositories {
-        jcenter()
         mavenCentral()
         maven { url "https://repo.spring.io/plugins-release" }
     }

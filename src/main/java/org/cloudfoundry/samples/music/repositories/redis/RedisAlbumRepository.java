@@ -100,6 +100,13 @@ public class RedisAlbumRepository implements CrudRepository<Album, String> {
         }
     }
 
+    @Override
+    public void deleteAllById(Iterable<? extends String> ids) {
+        for (String id : ids) {
+            deleteById(id);
+        }
+    }
+
     private <T> List<T> convertIterableToList(Iterable<T> iterable) {
         List<T> list = new ArrayList<>();
         for (T object : iterable) {
