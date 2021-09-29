@@ -9,9 +9,9 @@ The application use Spring Java configuration and [bean profiles](http://docs.sp
 
 ## Building
 
-This project requires a Java version between 8 and 16 to compile.
+This project requires a Java version between 8 and 17 to compile.
 
-To build a runnable Spring Boot jar file, run the following command: 
+To build a runnable Spring Boot jar file, run the following command:
 
 ~~~
 $ ./gradlew clean assemble
