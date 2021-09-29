@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        springBootVersion = '2.5.2'
+        springBootVersion = '2.5.5'
         javaCfEnvVersion = '2.1.2.RELEASE'
     }
 

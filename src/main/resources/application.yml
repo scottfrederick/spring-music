@@ -13,12 +13,14 @@ management:
 
 ---
 spring:
-  profiles: mysql
+  config:
+    activate:
+      on-profile: mysql
   datasource:
     url: "jdbc:mysql://localhost/music"
     driver-class-name: com.mysql.jdbc.Driver
     username:
-    password: 
+    password:
   jpa:
     properties:
       hibernate:
@@ -26,12 +28,14 @@ spring:
 
 ---
 spring:
-  profiles: postgres
+  config:
+    activate:
+      on-profile: postgres
   datasource:
     url: "jdbc:postgresql://localhost/music"
     driver-class-name: org.postgresql.Driver
     username: postgres
-    password: 
+    password:
   jpa:
     properties:
       hibernate:
