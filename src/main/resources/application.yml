@@ -15,6 +15,16 @@ management:
 spring:
   config:
     activate:
+      on-profile: http2
+
+server:
+  http2:
+    enabled: true
+
+---
+spring:
+  config:
+    activate:
       on-profile: mysql
   datasource:
     url: "jdbc:mysql://localhost/music"
