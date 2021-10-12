@@ -52,6 +52,12 @@ After installing the 'cf' [command-line interface for Cloud Foundry](http://docs
 $ cf push
 ~~~
 
+Please note that if you built the app using Java 11, you will need to uncomment this line from `manifest.yml` as well:
+
+~~~
+#    JBP_CONFIG_OPEN_JDK_JRE: '{ jre: { version: 11.+ } }'
+~~~
+
 The application will be pushed using settings in the provided `manifest.yml` file. The output from the command will show the URL that has been assigned to the application.
 
 ### Creating and binding services
