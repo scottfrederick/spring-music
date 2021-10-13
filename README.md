@@ -52,11 +52,20 @@ After installing the 'cf' [command-line interface for Cloud Foundry](http://docs
 $ cf push
 ~~~
 
-Please note that if you built the app using Java 11, you will need to uncomment this line from `manifest.yml` as well:
+By default, gradle will build this app using Java 8 compatibility. If you want to use a more recent version of Java, you will need to update two things. In `build.gradle`, change the Java version in these lines:
+
+~~~
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+~~~
+
+For example, to use Java 11, you would change the `1.8`. to `1.11`. You will also need to uncomment this line from the README:
 
 ~~~
 #    JBP_CONFIG_OPEN_JDK_JRE: '{ jre: { version: 11.+ } }'
 ~~~
+
+If you wish to use Java 17, replace `11` with `17` in the above examples.
 
 The application will be pushed using settings in the provided `manifest.yml` file. The output from the command will show the URL that has been assigned to the application.
 
