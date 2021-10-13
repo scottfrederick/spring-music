@@ -52,21 +52,6 @@ After installing the 'cf' [command-line interface for Cloud Foundry](http://docs
 $ cf push
 ~~~
 
-By default, gradle will build this app using Java 8 compatibility. If you want to use a more recent version of Java, you will need to update two things. In `build.gradle`, change the Java version in these lines:
-
-~~~
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
-~~~
-
-For example, to use Java 11, you would change the `1.8`. to `1.11`. You will also need to uncomment this line from the README:
-
-~~~
-#    JBP_CONFIG_OPEN_JDK_JRE: '{ jre: { version: 11.+ } }'
-~~~
-
-If you wish to use Java 17, replace `11` with `17` in the above examples.
-
 The application will be pushed using settings in the provided `manifest.yml` file. The output from the command will show the URL that has been assigned to the application.
 
 ### Creating and binding services
@@ -120,4 +105,29 @@ $ cf restart
 Database drivers for MySQL, Postgres, Microsoft SQL Server, MongoDB, and Redis are included in the project.
 
 To connect to an Oracle database, you will need to download the appropriate driver (e.g. from http://www.oracle.com/technetwork/database/features/jdbc/index-091264.html). Then make a `libs` directory in the `spring-music` project, and move the driver, `ojdbc7.jar` or `ojdbc8.jar`, into the `libs` directory.
-In `build.gradle`, uncomment the line `compile files('libs/ojdbc8.jar')` or `compile files('libs/ojdbc7.jar')` and run `./gradle assemble`
+In `build.gradle`, uncomment the line `compile files('libs/ojdbc8.jar')` or `compile files('libs/ojdbc7.jar')` and run `./gradle assemble`.
+
+
+## Alternate Java versions
+
+By default, the application will be built and deployed using Java 8 compatibility.
+If you want to use a more recent version of Java, you will need to update two things.
+
+In `build.gradle`, change the `targetCompatibility` Java version:
+
+~~~
+java {
+  ...
+  targetCompatibility = JavaVersion.VERSION_1_8
+}
+~~~
+
+Set `targetCompatibility` to `JavaVersion.VERSION_11` for Java 11 or `JavaVersion.VERSION_17` for Java 17.
+
+In `manifest.yml`, uncomment and change the Java buildpack JRE version:
+
+~~~
+#    JBP_CONFIG_OPEN_JDK_JRE: '{ jre: { version: 11.+ } }'
+~~~
+
+Set the version to `11.+` for Java 11 or `17.+` for Java 17.

@@ -24,9 +24,6 @@ apply plugin: 'io.spring.dependency-management'
 
 version = '1.0'
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
-
 repositories {
     mavenCentral()
 }
@@ -67,6 +64,16 @@ dependencies {
     // Testing
     testImplementation "junit:junit"
     testImplementation "org.springframework.boot:spring-boot-starter-test"
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+
+    if (JavaVersion.current() != project.targetCompatibility) {
+        logger.warn("The build is using Java ${JavaVersion.current()} to build a Java ${project.targetCompatibility} compatible archive.")
+        logger.warn("See the project README for instructions on changing the target Java version.")
+    }
 }
 
 jar {
