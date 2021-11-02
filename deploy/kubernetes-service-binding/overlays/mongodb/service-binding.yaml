@@ -9,8 +9,8 @@ type: servicebinding.io/mongodb
 stringData:
   type: mongodb
   host: music-mongodb.mongodb.svc.cluster.local
-  authentication-database: admin
-  username: root
+  database: music
+  username: testuser
   password: secret
 
 ---

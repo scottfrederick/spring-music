@@ -2,7 +2,7 @@
 
 The Spring Music application can be packaged as an OCI image and run in a Kubernetes container using the instructions in this document.
 
-NOTE: All commands shown below should be run from the root of the project. 
+NOTE: All commands shown below should be run from the root of the project.
 
 == Prerequisites
 
@@ -28,13 +28,14 @@ $ skaffold run -f deploy/kubernetes-service-binding/skaffold.yaml --port-forward
 
 === External database
 
-Skaffold can install and run a database server in the Kubernetes cluster using Helm and then configure the application to use the database server.  
+Skaffold can install and run a database server in the Kubernetes cluster using Helm and then configure the application to use the database server.
 These examples use Helm charts from the https://bitnami.com/[Bitnami] catalog.
 You must add the Bitnami chart repository to Helm before running the `skaffold run` commands in this section:
 
 [source,bash]
 ----
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
+$ helm repo update bitnami
 ----
 
 Once the Bitnami repository has been added, you can provide a profile argument to `skaffold run` to select a database server to install along with the application.
@@ -49,16 +50,16 @@ $ skaffold run -f deploy/kubernetes-service-binding/skaffold.yaml --port-forward
 ----
 
 ==== MongoDB
- 
+
 Use the following command to run the application with a MongoDB server:
 
 [source,bash]
 ----
 $ skaffold run -f deploy/kubernetes-service-binding/skaffold.yaml --port-forward -d $USER -p mongodb-server,mongodb
 ----
- 
+
 ==== Redis
- 
+
 Use the following command to run the application with a Redis server:
 
 [source,bash]
@@ -97,7 +98,7 @@ stringData:
   host: music-mysql.mysql.svc.cluster.local
   port: "3306"
   database: music
-  username: root
+  username: testuser
   password: secret
 ----
 
@@ -137,7 +138,7 @@ At runtime, Spring Cloud Bindings https://github.com/spring-cloud/spring-cloud-b
                     "value": "com.mysql.cj.jdbc.Driver"
                 },
                 "spring.datasource.username": {
-                    "value": "root"
+                    "value": "testuser"
                 },
                 "spring.datasource.url": {
                     "value": "jdbc:mysql://music-mysql.mysql.svc.cluster.local:3306/music"
@@ -149,7 +150,7 @@ At runtime, Spring Cloud Bindings https://github.com/spring-cloud/spring-cloud-b
                     "value": "r2dbc:mysql://music-mysql.mysql.svc.cluster.local:3306/music"
                 },
                 "spring.r2dbc.username": {
-                    "value": "root"
+                    "value": "testuser"
                 },
                 "spring.datasource.password": {
                     "value": "******"

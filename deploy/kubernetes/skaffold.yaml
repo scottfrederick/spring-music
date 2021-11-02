@@ -1,4 +1,4 @@
-apiVersion: skaffold/v2beta9
+apiVersion: skaffold/v2beta25
 kind: Config
 metadata:
   name: spring-music
@@ -20,6 +20,7 @@ deploy:
 portForward:
   - resourceType: service
     resourceName: spring-music
+    namespace: default
     port: 8080
     localPort: 8080
 
@@ -29,13 +30,15 @@ profiles:
       helm:
         releases:
           - name: music
-            chartPath: bitnami/mongodb
-            remote: true
+            remoteChart: bitnami/mongodb
             namespace: mongodb
             createNamespace: true
             wait: true
             setValues:
-              auth.rootPassword: secret
+              architecture: standalone
+              auth.database: music
+              auth.username: testuser
+              auth.password: secret
   - name: mongodb
     deploy:
       kustomize:
@@ -51,14 +54,15 @@ profiles:
       helm:
         releases:
           - name: music-mysql
-            chartPath: bitnami/mysql
-            remote: true
+            remoteChart: bitnami/mysql
             namespace: mysql
             createNamespace: true
             wait: true
             setValues:
-              root.password: secret
-              db.name: music
+              architecture: standalone
+              auth.database: music
+              auth.username: testuser
+              auth.password: secret
   - name: mysql
     deploy:
       kustomize:
@@ -74,13 +78,12 @@ profiles:
       helm:
         releases:
           - name: music-redis
-            chartPath: bitnami/redis
-            remote: true
+            remoteChart: bitnami/redis
             namespace: redis
             createNamespace: true
             wait: true
             setValues:
-              password: secret
+              auth.password: secret
   - name: redis
     deploy:
       kustomize:

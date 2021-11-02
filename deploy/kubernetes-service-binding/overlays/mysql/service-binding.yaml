@@ -11,7 +11,7 @@ stringData:
   host: music-mysql.mysql.svc.cluster.local
   port: "3306"
   database: music
-  username: root
+  username: testuser
   password: secret
 
 ---
