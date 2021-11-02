@@ -2,10 +2,10 @@
 apiVersion: v1
 kind: Secret
 metadata:
-  name: spring-music-db
+  name: spring-music-mongo-db
   labels:
     app.kubernetes.io/name: spring-music
-type: service.binding/mongodb
+type: servicebinding.io/mongodb
 stringData:
   type: mongodb
   host: music-mongodb.mongodb.svc.cluster.local
@@ -14,18 +14,18 @@ stringData:
   password: secret
 
 ---
-apiVersion: service.binding/v1alpha2
+apiVersion: servicebinding.io/v1alpha3
 kind: ServiceBinding
 metadata:
-  name: spring-music-binding
+  name: spring-music-mongo-binding
   labels:
     app.kubernetes.io/name: spring-music
 spec:
-  application:
+  workload:
     apiVersion: apps/v1
     kind: Deployment
     name: spring-music
   service:
     apiVersion: v1
     kind: Secret
-    name: spring-music-db
+    name: spring-music-mongo-db

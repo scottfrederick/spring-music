@@ -2,28 +2,29 @@
 apiVersion: v1
 kind: Secret
 metadata:
-  name: spring-music-db
+  name: spring-music-redis-db
   labels:
     app.kubernetes.io/name: spring-music
-type: service.binding/redis
+type: servicebinding.io/redis
 stringData:
   type: redis
   host: music-redis-master.redis.svc.cluster.local
+  port: "6379"
   password: secret
 
 ---
-apiVersion: service.binding/v1alpha2
+apiVersion: servicebinding.io/v1alpha3
 kind: ServiceBinding
 metadata:
-  name: spring-music-binding
+  name: spring-music-redis-binding
   labels:
     app.kubernetes.io/name: spring-music
 spec:
-  application:
+  workload:
     apiVersion: apps/v1
     kind: Deployment
     name: spring-music
   service:
     apiVersion: v1
     kind: Secret
-    name: spring-music-db
+    name: spring-music-redis-db
