@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        springBootVersion = '2.5.5'
+        springBootVersion = '2.6.5'
         javaCfEnvVersion = '2.1.2.RELEASE'
     }
 
@@ -69,8 +69,8 @@ dependencies {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
 
     if (JavaVersion.current() != project.targetCompatibility) {
         logger.warn("The build is using Java ${JavaVersion.current()} to build a Java ${project.targetCompatibility} compatible archive.")
@@ -80,4 +80,5 @@ java {
 
 jar {
     archiveBaseName = "spring-music"
+    enabled = false
 }
