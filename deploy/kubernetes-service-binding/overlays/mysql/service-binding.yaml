@@ -8,6 +8,7 @@ metadata:
 type: servicebinding.io/mysql
 stringData:
   type: mysql
+  provider: bitnami
   host: music-mysql.mysql.svc.cluster.local
   port: "3306"
   database: music
@@ -15,7 +16,7 @@ stringData:
   password: secret
 
 ---
-apiVersion: servicebinding.io/v1alpha3
+apiVersion: servicebinding.io/v1beta1
 kind: ServiceBinding
 metadata:
   name: spring-music-mysql-binding

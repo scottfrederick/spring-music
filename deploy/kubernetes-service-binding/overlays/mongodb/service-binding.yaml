@@ -8,13 +8,14 @@ metadata:
 type: servicebinding.io/mongodb
 stringData:
   type: mongodb
+  provider: bitnami
   host: music-mongodb.mongodb.svc.cluster.local
   database: music
   username: testuser
   password: secret
 
 ---
-apiVersion: servicebinding.io/v1alpha3
+apiVersion: servicebinding.io/v1beta1
 kind: ServiceBinding
 metadata:
   name: spring-music-mongo-binding
