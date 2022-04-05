@@ -1,6 +1,6 @@
 package org.cloudfoundry.samples.music.web;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,19 +13,13 @@ import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import io.pivotal.cfenv.core.CfEnv;
-import io.pivotal.cfenv.core.CfService;
-
 @RestController
 public class InfoController {
-    private final CfEnv cfEnv;
-
-    private Environment springEnvironment;
+    private final Environment springEnvironment;
 
     @Autowired
     public InfoController(Environment springEnvironment) {
         this.springEnvironment = springEnvironment;
-        this.cfEnv = new CfEnv();
     }
 
     @RequestMapping(value = "/request")
@@ -41,21 +35,12 @@ public class InfoController {
 
     @RequestMapping(value = "/appinfo")
     public ApplicationInfo info() {
-        return new ApplicationInfo(springEnvironment.getActiveProfiles(), getServiceNames());
+        return new ApplicationInfo(springEnvironment.getActiveProfiles(), new String[0]);
     }
 
     @RequestMapping(value = "/service")
-    public List<CfService> showServiceInfo() {
-        return cfEnv.findAllServices();
+    public List<String> showServiceInfo() {
+		return Collections.emptyList();
     }
 
-    private String[] getServiceNames() {
-        List<CfService> services = cfEnv.findAllServices();
-
-        List<String> names = new ArrayList<>();
-        for (CfService service : services) {
-            names.add(service.getName());
-        }
-        return names.toArray(new String[0]);
-    }
 }

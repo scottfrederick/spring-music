@@ -1,7 +1,5 @@
 package org.cloudfoundry.samples.music.config;
 
-import io.pivotal.cfenv.core.CfEnv;
-import io.pivotal.cfenv.core.CfService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.boot.autoconfigure.data.mongo.MongoDataAutoConfiguration;
@@ -10,6 +8,8 @@ import org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration;
 import org.springframework.boot.autoconfigure.data.redis.RedisRepositoriesAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
+import org.springframework.cloud.bindings.Binding;
+import org.springframework.cloud.bindings.Bindings;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.env.ConfigurableEnvironment;
@@ -21,10 +21,8 @@ import org.springframework.util.StringUtils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -32,15 +30,8 @@ public class SpringApplicationContextInitializer implements ApplicationContextIn
 
     private static final Log logger = LogFactory.getLog(SpringApplicationContextInitializer.class);
 
-    private static final Map<String, List<String>> profileNameToServiceTags = new HashMap<>();
-    static {
-        profileNameToServiceTags.put("mongodb", Collections.singletonList("mongodb"));
-        profileNameToServiceTags.put("postgres", Collections.singletonList("postgres"));
-        profileNameToServiceTags.put("mysql", Collections.singletonList("mysql"));
-        profileNameToServiceTags.put("redis", Collections.singletonList("redis"));
-        profileNameToServiceTags.put("oracle", Collections.singletonList("oracle"));
-        profileNameToServiceTags.put("sqlserver", Collections.singletonList("sqlserver"));
-    }
+    private static final List<String> supportedServiceTypes =
+            Arrays.asList("mongodb", "mysql", "oracle", "postgresql", "redis", "sqlserver");
 
     @Override
     public void initialize(ConfigurableApplicationContext applicationContext) {
@@ -54,29 +45,30 @@ public class SpringApplicationContextInitializer implements ApplicationContextIn
     }
 
     private void addCloudProfile(ConfigurableEnvironment appEnvironment) {
-        CfEnv cfEnv = new CfEnv();
-
         List<String> profiles = new ArrayList<>();
 
-        List<CfService> services = cfEnv.findAllServices();
-        List<String> serviceNames = services.stream()
-                .map(CfService::getName)
-                .collect(Collectors.toList());
+        List<String> bindingTypes;
+        try {
+            Class.forName("org.springframework.cloud.bindings.Bindings");
+            bindingTypes = new Bindings().getBindings().stream()
+                    .map(Binding::getType)
+                    .collect(Collectors.toList());
+            logger.info("Found bindings [" + StringUtils.collectionToCommaDelimitedString(bindingTypes) + "]");
+        } catch (ClassNotFoundException e) {
+            logger.warn("Spring Cloud Bindings is not on the classpath, bindings will not be detected");
+            bindingTypes = Collections.emptyList();
+        }
 
-        logger.info("Found services " + StringUtils.collectionToCommaDelimitedString(serviceNames));
-
-        for (CfService service : services) {
-            for (String profileKey : profileNameToServiceTags.keySet()) {
-                if (service.getTags().containsAll(profileNameToServiceTags.get(profileKey))) {
-                    profiles.add(profileKey);
-                }
+        for (String serviceType : bindingTypes) {
+            if (supportedServiceTypes.contains(serviceType)) {
+                profiles.add(serviceType);
             }
         }
 
         if (profiles.size() > 1) {
             throw new IllegalStateException(
-                    "Only one service of the following types may be bound to this application: " +
-                            profileNameToServiceTags.values().toString() + ". " +
+                    "Only one service of the following types may be bound to this application: [" +
+                            StringUtils.collectionToCommaDelimitedString(supportedServiceTypes) + "]. " +
                             "These services are bound to the application: [" +
                             StringUtils.collectionToCommaDelimitedString(profiles) + "]");
         }
@@ -88,15 +80,13 @@ public class SpringApplicationContextInitializer implements ApplicationContextIn
     }
 
     private void validateActiveProfiles(ConfigurableEnvironment appEnvironment) {
-        Set<String> validLocalProfiles = profileNameToServiceTags.keySet();
-
         List<String> serviceProfiles = Stream.of(appEnvironment.getActiveProfiles())
-                .filter(validLocalProfiles::contains)
+                .filter(supportedServiceTypes::contains)
                 .collect(Collectors.toList());
 
         if (serviceProfiles.size() > 1) {
             throw new IllegalStateException("Only one active Spring profile may be set among the following: " +
-                    validLocalProfiles.toString() + ". " +
+                    StringUtils.collectionToCommaDelimitedString(supportedServiceTypes) + ". " +
                     "These profiles are active: [" +
                     StringUtils.collectionToCommaDelimitedString(serviceProfiles) + "]");
         }

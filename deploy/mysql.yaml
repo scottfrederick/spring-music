@@ -1,0 +1,8 @@
+---
+apiVersion: with.sql.tanzu.vmware.com/v1
+kind: MySQL
+metadata:
+  name: music-mysql
+spec:
+  imagePullSecretName: tanzu-image-registry
+  serviceType: LoadBalancer
