@@ -1,7 +1,7 @@
 buildscript {
     ext {
-        springBootVersion = '2.5.5'
-        javaCfEnvVersion = '2.1.2.RELEASE'
+        springBootVersion = '2.6.7'
+        javaCfEnvVersion = '2.4.0'
     }
 
     repositories {
@@ -41,7 +41,7 @@ dependencies {
     implementation "io.pivotal.cfenv:java-cfenv-boot:${javaCfEnvVersion}"
 
     // JPA Persistence
-    runtimeOnly "org.apache.commons:commons-pool2:2.6.0"
+    runtimeOnly "org.apache.commons:commons-pool2"
     runtimeOnly "com.h2database:h2"
     runtimeOnly "mysql:mysql-connector-java"
     runtimeOnly "org.postgresql:postgresql"
