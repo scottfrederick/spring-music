@@ -1,0 +1,16 @@
+[project]
+id = "org.cloudfoundry.samples.spring-music"
+name = "Spring Music"
+
+[build]
+exclude = [
+    "/.git*",
+    "/build",
+    "/bin"
+]
+
+# disable the addition of spring-cloud-bindings by Paketo Cloud-Native buildpacks
+# spring-music is built to use CF Service bindings, not K8s service bindings
+[[build.env]]
+name = "BP_SPRING_CLOUD_BINDINGS_DISABLED"
+value = "true"
