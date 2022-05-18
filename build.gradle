@@ -1,31 +1,17 @@
-buildscript {
-    ext {
-        springBootVersion = '2.6.7'
-        javaCfEnvVersion = '2.4.0'
-    }
-
-    repositories {
-        mavenCentral()
-        maven { url "https://repo.spring.io/plugins-release" }
-    }
-
-    dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-    }
+plugins {
+    id 'org.springframework.boot' version '2.6.7'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'java'
+    id 'eclipse-wtp'
+    id 'idea'
 }
-
-apply plugin: 'java'
-
-apply plugin: 'eclipse-wtp'
-apply plugin: 'idea'
-
-apply plugin: 'org.springframework.boot'
-apply plugin: 'io.spring.dependency-management'
-
-version = '1.0'
 
 repositories {
     mavenCentral()
+}
+
+ext {
+    javaCfEnvVersion = '2.4.0'
 }
 
 dependencies {
