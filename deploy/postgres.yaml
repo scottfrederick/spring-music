@@ -48,7 +48,7 @@ spec:
                   - key: postgres-instance
                     operator: In
                     values:
-                      - music-db
+                      - music-postgres
               topologyKey: kubernetes.io/hostname
             weight: 100
   dataPodConfig:
@@ -66,6 +66,6 @@ spec:
                   - key: postgres-instance
                     operator: In
                     values:
-                      - music-db
+                      - music-postgres
               topologyKey: kubernetes.io/hostname
             weight: 100

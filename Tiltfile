@@ -18,8 +18,7 @@ if postgres_resources > 0 and mysql_resources == 0:
     k8s_yaml('deploy/postgres.yaml')
     k8s_resource(new_name='music-postgres',
                  objects=['music-postgres'],
-                 extra_pod_selectors=[{'postgres-instance': 'music-postgres'}],
-                 port_forwards=5432)
+                 extra_pod_selectors=[{'postgres-instance': 'music-postgres'}])
     service_ref_args = " --service-ref db=sql.tanzu.vmware.com/v1:Postgres:music-postgres"
     app_deps = ['music-postgres']
 
@@ -33,6 +32,7 @@ k8s_custom_deploy(
                 " --label app.kubernetes.io/part-of=spring-music" +
                 " --label tanzu.app.live.view=true" +
                 " --label tanzu.app.live.view.application.name=spring-music" +
+                " --annotation autoscaling.knative.dev/minScale=1" +
                 service_ref_args +
                 " --yes >/dev/null" +
                 " && " +
@@ -45,7 +45,7 @@ k8s_custom_deploy(
     ]
 )
 
-k8s_resource('spring-music', port_forwards=["8080:8080"],
+k8s_resource('spring-music', port_forwards=["8080:8080", "8081:8081"],
             extra_pod_selectors=[{'serving.knative.dev/service': 'spring-music'}],
             resource_deps=app_deps)
 
