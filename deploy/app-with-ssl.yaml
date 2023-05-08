@@ -1,0 +1,72 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spring-music
+  namespace: spring-music
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: spring-music
+  template:
+    metadata:
+      labels:
+        app: spring-music
+    spec:
+      containers:
+        - image: gcr.io/sfrederick-sandbox/spring-music:latest
+          name: spring-music
+          ports:
+            - containerPort: 8443
+              name: main
+            - containerPort: 8444
+              name: management
+          volumeMounts:
+            - name: certs
+              mountPath: /certs
+              readOnly: true
+          env:
+            - name: SERVER_PORT
+              value: "8443"
+            - name: SERVER_SSL_ENABLED
+              value: "true"
+            - name: SERVER_SSL_CERTIFICATE
+              value: "file:///certs/tls.crt"
+            - name: SERVER_SSL_CERTIFICATE_PRIVATE_KEY
+              value: "file:///certs/tls.key"
+            - name: SERVER_SSL_KEY_STORE_PASSWORD
+              value: ""
+            - name: SERVER_SSL_TRUST_CERTIFICATE
+              value: "file:///certs/ca.crt"
+            - name: MANAGEMENT_SERVER_PORT
+              value: "8444"
+            - name: MANAGEMENT_SERVER_SSL_ENABLED
+              value: "true"
+            - name: MANAGEMENT_SERVER_SSL_CERTIFICATE
+              value: "file:///certs/tls.crt"
+            - name: MANAGEMENT_SERVER_SSL_CERTIFICATE_PRIVATE_KEY
+              value: "file:///certs/tls.key"
+            - name: MANAGEMENT_SERVER_SSL_KEY_STORE_PASSWORD
+              value: ""
+      volumes:
+        - name: certs
+          secret:
+            secretName: server-certificate
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: spring-music
+  namespace: spring-music
+spec:
+  type: LoadBalancer
+  selector:
+    app: spring-music
+  ports:
+    - port: 8443
+      protocol: TCP
+      name: main
+    - port: 8444
+      protocol: TCP
+      name: management

@@ -1,0 +1,60 @@
+# from https://tanzu.vmware.com/developer/guides/kubernetes-mtls/
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: spring-music
+---
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: bootstrap-issuer
+  namespace: spring-music
+spec:
+  selfSigned: { }
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: root-certificate
+  namespace: spring-music
+spec:
+  isCA: true
+  secretName: root-certificate
+  commonName: "Root Certificate"
+  privateKey:
+    algorithm: RSA
+    size: 4096
+    encoding: PKCS8
+  issuerRef:
+    name: bootstrap-issuer
+    kind: Issuer
+---
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: root-issuer
+  namespace: spring-music
+spec:
+  ca:
+    secretName: root-certificate
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: server-certificate
+  namespace: spring-music
+spec:
+  secretName: server-certificate
+  privateKey:
+    algorithm: RSA
+    encoding: PKCS8
+    size: 4096
+  commonName: "Spring Music demo"
+  usages:
+    - server auth
+    - key encipherment
+    - digital signature
+  issuerRef:
+    name: root-issuer
+    kind: Issuer
