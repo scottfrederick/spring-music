@@ -1,5 +1,5 @@
 plugins {
-    id 'org.springframework.boot' version '2.6.7'
+    id 'org.springframework.boot' version '2.7.14'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'java'
     id 'eclipse-wtp'
@@ -11,7 +11,7 @@ repositories {
 }
 
 ext {
-    javaCfEnvVersion = '2.4.0'
+    javaCfEnvVersion = '2.4.2'
 }
 
 dependencies {
