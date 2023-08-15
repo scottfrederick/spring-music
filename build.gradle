@@ -29,7 +29,7 @@ dependencies {
     // JPA Persistence
     runtimeOnly "org.apache.commons:commons-pool2"
     runtimeOnly "com.h2database:h2"
-    runtimeOnly "mysql:mysql-connector-java"
+    runtimeOnly "com.mysql:mysql-connector-j"
     runtimeOnly "org.postgresql:postgresql"
     runtimeOnly "com.microsoft.sqlserver:mssql-jdbc"
 
