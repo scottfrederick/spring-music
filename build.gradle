@@ -7,7 +7,7 @@ plugins {
 }
 
 ext {
-    springCloudBindingsVersion = "1.8.1"
+    springCloudBindingsVersion = "2.0.2"
 }
 
 repositories {
@@ -24,7 +24,7 @@ dependencies {
     implementation "org.springframework.boot:spring-boot-starter-validation"
 
     // Spring Cloud Bindings
-    compileOnly "org.springframework.cloud:spring-cloud-bindings:${springCloudBindingsVersion}"
+    implementation "org.springframework.cloud:spring-cloud-bindings:${springCloudBindingsVersion}"
 
     // JPA Persistence
     runtimeOnly "org.apache.commons:commons-pool2"
