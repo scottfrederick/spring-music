@@ -1,6 +1,6 @@
 plugins {
-    id 'org.springframework.boot' version '2.7.14'
-    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'org.springframework.boot' version '3.1.2'
+    id 'io.spring.dependency-management' version '1.0.15.RELEASE'
     id 'java'
     id 'eclipse-wtp'
     id 'idea'
@@ -11,7 +11,7 @@ repositories {
 }
 
 ext {
-    javaCfEnvVersion = '2.4.2'
+    javaCfEnvVersion = '3.0.0'
 }
 
 dependencies {
@@ -53,8 +53,8 @@ dependencies {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
 
     if (JavaVersion.current() != project.targetCompatibility) {
         logger.warn("The build is using Java ${JavaVersion.current()} to build a Java ${project.targetCompatibility} compatible archive.")

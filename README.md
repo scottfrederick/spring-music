@@ -9,7 +9,10 @@ The application use Spring Java configuration and [bean profiles](http://docs.sp
 
 ## Building
 
-This project requires a Java version between 8 and 17 to compile.
+This project requires Java version 17 or later to compile.
+
+> [!NOTE]
+> If you need to use an earlier Java version, check out the [`spring-boot-2` branch](https://github.com/cloudfoundry-samples/spring-music/tree/spring-boot-2), which can be built with Java 8 and later.  
 
 To build a runnable Spring Boot jar file, run the following command:
 
@@ -24,7 +27,7 @@ One Spring bean profile should be activated to choose the database provider that
 The application can be started locally using the following command:
 
 ~~~
-$ java -jar -Dspring.profiles.active=<profile> build/libs/spring-music.jar
+$ java -jar -Dspring.profiles.active=<profile> build/libs/spring-music-1.0.jar
 ~~~
 
 where `<profile>` is one of the following values:
@@ -110,24 +113,20 @@ In `build.gradle`, uncomment the line `compile files('libs/ojdbc8.jar')` or `com
 
 ## Alternate Java versions
 
-By default, the application will be built and deployed using Java 8 compatibility.
+By default, the application will be built and deployed using Java 17 compatibility.
 If you want to use a more recent version of Java, you will need to update two things.
 
-In `build.gradle`, change the `targetCompatibility` Java version:
+In `build.gradle`, change the `targetCompatibility` Java version from `JavaVersion.VERSION_17` to a different value from `JavaVersion`:
 
 ~~~
 java {
   ...
-  targetCompatibility = JavaVersion.VERSION_1_8
+  targetCompatibility = JavaVersion.VERSION_17
 }
 ~~~
 
-Set `targetCompatibility` to `JavaVersion.VERSION_11` for Java 11 or `JavaVersion.VERSION_17` for Java 17.
-
-In `manifest.yml`, uncomment and change the Java buildpack JRE version:
+In `manifest.yml`, uncomment and change the Java buildpack JRE version from `version: 17.+` to a different value:
 
 ~~~
-#    JBP_CONFIG_OPEN_JDK_JRE: '{ jre: { version: 11.+ } }'
+#    JBP_CONFIG_OPEN_JDK_JRE: '{ jre: { version: 17.+ } }'
 ~~~
-
-Set the version to `11.+` for Java 11 or `17.+` for Java 17.
